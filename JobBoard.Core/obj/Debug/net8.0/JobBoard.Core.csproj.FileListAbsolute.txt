@@ -1,0 +1,12 @@
+C:\devops\repos\JobBoard\JobBoard.Core\bin\Debug\net8.0\JobBoard.Core.deps.json
+C:\devops\repos\JobBoard\JobBoard.Core\bin\Debug\net8.0\JobBoard.Core.dll
+C:\devops\repos\JobBoard\JobBoard.Core\bin\Debug\net8.0\JobBoard.Core.pdb
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.AssemblyInfoInputs.cache
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.AssemblyInfo.cs
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.csproj.CoreCompileInputs.cache
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.sourcelink.json
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.dll
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\refint\JobBoard.Core.dll
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.pdb
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\ref\JobBoard.Core.dll

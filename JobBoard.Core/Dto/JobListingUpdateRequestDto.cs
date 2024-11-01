@@ -7,7 +7,7 @@ namespace JobBoard.Core.Dto
     /// <summary>
     /// Represents the Dto class that contains the JobListing details to update
     /// </summary>
-    public class JobListingUpdateRequest
+    public class JobListingUpdateRequestDto
     {
         [Required(ErrorMessage = "JobID can't be blank")]
         public Guid JobID { get; set; }
@@ -17,6 +17,9 @@ namespace JobBoard.Core.Dto
 
         [Required(ErrorMessage = "Company name can't be blank")]
         public string CompanyName { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "Email can NOT be blank")]
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "City and state can't be blank")]
         public string CityAndState { get; set; } = string.Empty;
@@ -27,6 +30,9 @@ namespace JobBoard.Core.Dto
         [Required(ErrorMessage = "Job type can't be blank")]
         public JobTypeOptions JobType { get; set; }
         
+        [Required(ErrorMessage = "JobPostedDate can not be blank!")]
+        public DateTime JobPostedDate { get; set; }
+
         [Required(ErrorMessage = "Full description can't be blank")]
         public string FullDescription { get; set; } = string.Empty;
 
@@ -37,9 +43,11 @@ namespace JobBoard.Core.Dto
                 JobID = JobID,
                 JobTitle = JobTitle,
                 CompanyName = CompanyName,
+                Email = Email,
                 CityAndState = CityAndState,
                 PayRange = PayRange,
                 JobType = JobType.ToString(),
+                JobPostedDate = JobPostedDate,
                 FullDescription = FullDescription
             };
         }

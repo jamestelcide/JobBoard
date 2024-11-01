@@ -33,11 +33,16 @@ namespace JobBoard.Infrastructure.Repositories
             return await _db.JobListings.ToListAsync();
         }
 
-        public async Task<JobListing?> GetJobListingByCityAndStateAsync(string cityAndState)
+        public async Task<List<JobListing>> GetJobListingsByCityAndStateAsync(string cityAndState)
         {
             _logger.LogInformation("GetJobListingByCityAndStateAsync of JobListingRepository");
 
-            return await _db.JobListings.FirstOrDefaultAsync(j => j.CityAndState == cityAndState);
+            return await _db.JobListings.Where(j => (j.CityAndState == cityAndState)).ToListAsync();
+        }
+
+        public async Task<JobListing?> GetJobListingByJobID(Guid jobID)
+        {
+            return await _db.JobListings.FirstOrDefaultAsync(j => j.JobID == jobID);
         }
 
         public async Task<JobListing> UpdateJobListingAsync(JobListing jobListing)

@@ -21,11 +21,18 @@ namespace JobBoard.Core.Domain.RepositoryContracts
         Task<List<JobListing>> GetAllJobListingsAsync();
 
         /// <summary>
-        /// Returns a JobListing object based on the given CityAndState
+        /// Returns a list of JobListing objects based on the given CityAndState
         /// </summary>
         /// <param name="cityAndState">CityAndState to search</param>
-        /// <returns>A JobListing object of null</returns>
-        Task<JobListing?> GetJobListingByCityAndStateAsync(string cityAndState);
+        /// <returns>A list of JobListing objects or null</returns>
+        Task<List<JobListing>> GetJobListingsByCityAndStateAsync(string cityAndState);
+
+        /// <summary>
+        /// Returns a JobListing object based on the given JobID
+        /// </summary>
+        /// <param name="jobID">JobID to search</param>
+        /// <returns>A JobListing object or null</returns>
+        Task<JobListing?> GetJobListingByJobID(Guid jobID);
 
         /// <summary>
         /// Updates a JobListing object based on the given JobID

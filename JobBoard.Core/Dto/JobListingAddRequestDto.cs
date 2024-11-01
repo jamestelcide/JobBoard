@@ -14,6 +14,11 @@ namespace JobBoard.Core.Dto
         [Required(ErrorMessage = "Company Name can not be blank!")]
         public string CompanyName { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Email can NOT be blank")]
+        [EmailAddress(ErrorMessage = "Please use valid email")]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "City and state can not be blank!")]
         public string CityAndState { get; set; } = string.Empty;
 
@@ -22,6 +27,9 @@ namespace JobBoard.Core.Dto
 
         [Required(ErrorMessage = "Job type can not be blank!")]
         public string JobType { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "JobPostedDate can not be blank!")]
+        public DateTime JobPostedDate { get; set; }
 
         [Required(ErrorMessage = "Description can not be blank!")]
         public string FullDescription { get; set; } = string.Empty;
@@ -36,9 +44,11 @@ namespace JobBoard.Core.Dto
             {
                 JobTitle = JobTitle,
                 CompanyName = CompanyName,
+                Email = Email,
                 CityAndState = CityAndState,
                 PayRange = PayRange,
                 JobType = JobType,
+                JobPostedDate = JobPostedDate,
                 FullDescription = FullDescription
             };
         }

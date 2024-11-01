@@ -11,9 +11,11 @@ namespace JobBoard.Core.Dto
         public Guid JobID { get; set; }
         public string JobTitle { get; set; } = string.Empty;
         public string CompanyName { get; set; } = string.Empty;
+        public string Email {  get; set; } = string.Empty;
         public string CityAndState { get; set; } = string.Empty;
         public string PayRange { get; set; } = string.Empty;
         public string JobType { get; set; } = string.Empty;
+        public DateTime JobPostedDate { get; set; }
         public string FullDescription { get; set; } = string.Empty;
 
         /// <summary>
@@ -31,9 +33,11 @@ namespace JobBoard.Core.Dto
             return JobID == jobListing.JobID &&
             JobTitle == jobListing.JobTitle &&
             CompanyName == jobListing.CompanyName &&
+            Email == jobListing.Email &&
             CityAndState == jobListing.CityAndState &&
             PayRange == jobListing.PayRange &&
             JobType == jobListing.JobType &&
+            JobPostedDate == jobListing.JobPostedDate &&
             FullDescription == jobListing.FullDescription;
         }
 
@@ -42,16 +46,18 @@ namespace JobBoard.Core.Dto
             return HashCode.Combine(JobID, JobTitle, CompanyName);
         }
 
-        public JobListingUpdateRequest ToJobListingUpdateRequest()
+        public JobListingUpdateRequestDto ToJobListingUpdateRequest()
         {
-            return new JobListingUpdateRequest()
+            return new JobListingUpdateRequestDto()
             {
                 JobID = JobID,
                 JobTitle = JobTitle,
                 CompanyName = CompanyName,
+                Email = Email,
                 CityAndState = CityAndState,
                 PayRange = PayRange,
                 JobType = (JobTypeOptions)Enum.Parse(typeof(JobTypeOptions), JobType, true),
+                JobPostedDate = JobPostedDate,
                 FullDescription = FullDescription
             };
         }
@@ -71,9 +77,11 @@ namespace JobBoard.Core.Dto
                 JobID = jobListing.JobID,
                 JobTitle = jobListing.JobTitle,
                 CompanyName = jobListing.CompanyName,
+                Email = jobListing.Email,
                 CityAndState = jobListing.CityAndState,
                 PayRange = jobListing.PayRange,
                 JobType = jobListing.JobType,
+                JobPostedDate = jobListing.JobPostedDate,
                 FullDescription = jobListing.FullDescription
             };
         }

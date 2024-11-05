@@ -10,3 +10,7 @@ C:\devops\repos\JobBoard\JobBoard.Infrastructure\obj\Debug\net8.0\JobBoard.Infra
 C:\devops\repos\JobBoard\JobBoard.Infrastructure\obj\Debug\net8.0\refint\JobBoard.Infrastructure.dll
 C:\devops\repos\JobBoard\JobBoard.Infrastructure\obj\Debug\net8.0\JobBoard.Infrastructure.pdb
 C:\devops\repos\JobBoard\JobBoard.Infrastructure\obj\Debug\net8.0\ref\JobBoard.Infrastructure.dll
+C:\devops\repos\JobBoard\JobBoard.Infrastructure\bin\Debug\net8.0\JobBoard.Core.dll
+C:\devops\repos\JobBoard\JobBoard.Infrastructure\bin\Debug\net8.0\JobBoard.Core.pdb
+C:\devops\repos\JobBoard\JobBoard.Infrastructure\obj\Debug\net8.0\JobBoard.Infrastructure.csproj.AssemblyReference.cache
+C:\devops\repos\JobBoard\JobBoard.Infrastructure\obj\Debug\net8.0\JobBoard.8B27D21A.Up2Date

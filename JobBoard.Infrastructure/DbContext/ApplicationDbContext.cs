@@ -25,7 +25,7 @@ namespace JobBoard.Infrastructure.DbContext
 
             builder.Entity<JobListing>().ToTable("JobListings");
 
-            string jobListingsJson = System.IO.File.ReadAllText("Seed/JobListingsSeed");
+            string jobListingsJson = System.IO.File.ReadAllText("Seed/JobListingsSeed.json");
 
             List<JobListing>? jobListings = System.Text.Json.JsonSerializer
                 .Deserialize<List<JobListing>>(jobListingsJson);

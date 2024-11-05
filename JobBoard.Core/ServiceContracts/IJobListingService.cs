@@ -21,25 +21,24 @@ namespace JobBoard.Core.ServiceContracts
         Task<List<JobListingResponseDto>> GetAllJobListingsAsync();
 
         /// <summary>
-        /// Returns a JobListing List based on the given CityAndState
+        /// Returns all JobListings with the same CityAndState Value
         /// </summary>
-        /// <param name="city"></param>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        Task<List<JobListingResponseDto?>> GetJobListingsByCityAndState(string? CityAndState);
+        /// <param name="cityAndState">CityAndState to search</param>
+        /// <returns>A list all JobListings with the same CityAndState Value</returns>
+        Task<List<JobListingResponseDto>> GetJobListingsByCityAndState(string? cityAndState);
 
         /// <summary>
         /// Updates the specified JobListing details based on the given JobID
         /// </summary>
         /// <param name="JobListingUpdateRequest">JobListing details to update, including JobID</param>
         /// <returns>Returns the JobListingResponse object after updating</returns>
-        Task<JobListingResponseDto> UpdateJobListingAsync(JobListingUpdateRequestDto? JobListingUpdateRequest);
+        Task<JobListingResponseDto> UpdateJobListingAsync(JobListingUpdateRequestDto? jobListingUpdateRequest);
 
         /// <summary>
         /// Deletes a JobListing based on the given JobID
         /// </summary>
         /// <param name="JobID"></param>
         /// <returns>Returns true if delete was successful; otherwise returns false</returns>
-        Task<bool> DeleteJobListingAsync(Guid JobID);
+        Task<bool> DeleteJobListingAsync(Guid jobID);
     }
 }

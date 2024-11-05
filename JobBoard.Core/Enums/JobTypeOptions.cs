@@ -2,6 +2,6 @@
 {
     public enum JobTypeOptions
     {
-        FullTime, PartTime, Internship
+        FullTime, PartTime, Internship, Remote
     }
 }

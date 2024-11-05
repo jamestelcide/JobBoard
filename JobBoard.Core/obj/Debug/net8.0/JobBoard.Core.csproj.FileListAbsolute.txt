@@ -10,3 +10,4 @@ C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.dll
 C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\refint\JobBoard.Core.dll
 C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.pdb
 C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\ref\JobBoard.Core.dll
+C:\devops\repos\JobBoard\JobBoard.Core\obj\Debug\net8.0\JobBoard.Core.csproj.AssemblyReference.cache

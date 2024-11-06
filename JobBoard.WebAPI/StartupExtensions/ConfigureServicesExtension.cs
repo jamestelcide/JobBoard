@@ -15,7 +15,16 @@ namespace JobBoard.WebAPI.StartupExtensions
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddEndpointsApiExplorer(); //Swagger
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddScoped<IJobListingRepository, JobListingRepository>();
+            services.AddScoped<IJobListingService, JobListingService>();
+
+            services.AddEndpointsApiExplorer(); //Generates description for all endpoints
+            
             services.AddSwaggerGen(options => {
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
             }); //generates OpenAPI specification
@@ -29,14 +38,6 @@ namespace JobBoard.WebAPI.StartupExtensions
                     .WithMethods("GET", "POST", "PUT", "DELETE")
                     ;
                 });
-            });
-
-            services.AddScoped<IJobListingRepository, JobListingRepository>();
-            services.AddScoped<IJobListingService, JobListingService>();
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -54,20 +55,6 @@ namespace JobBoard.WebAPI.StartupExtensions
                 ApplicationDbContext, Guid>>()
                 .AddRoleStore<RoleStore<ApplicationRole,
                 ApplicationDbContext, Guid>>();
-
-            services.AddAuthorization(options =>
-            {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser().Build();
-
-                options.AddPolicy("NotAuthenticated", policy =>
-                {
-                    policy.RequireAssertion(context =>
-                    {
-                        return !context.User.Identity.IsAuthenticated;
-                    });
-                });
-            });
 
             services.ConfigureApplicationCookie(options =>
             {

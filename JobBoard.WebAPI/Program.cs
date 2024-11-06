@@ -8,11 +8,11 @@ var app = builder.Build();
 
 app.UseHsts();
 app.UseHttpsRedirection();
-app.UseSwagger(); //creates endpoint for swagger.json
+app.UseStaticFiles();
+app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
 app.UseCors();
-app.UseHttpLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

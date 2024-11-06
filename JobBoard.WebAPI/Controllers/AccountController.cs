@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JobBoard.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing user accounts, including registration, login, and logout functionalities.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
@@ -15,6 +18,12 @@ namespace JobBoard.WebAPI.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// </summary>
+        /// <param name="userManager">Manages user-related operations.</param>
+        /// <param name="signInManager">Manages user sign-in operations.</param>
+        /// <param name="roleManager">Manages role-related operations.</param>
         public AccountController(UserManager<ApplicationUser> userManager, 
             SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
@@ -23,6 +32,11 @@ namespace JobBoard.WebAPI.Controllers
             _roleManager = roleManager;
         }
 
+        /// <summary>
+        /// Registers a new user account.
+        /// </summary>
+        /// <param name="registerDto">The registration details.</param>
+        /// <returns>A newly created user if successful; otherwise, an error message.</returns>
         [HttpPost("register")]
         public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDto registerDto)
         {
@@ -54,6 +68,11 @@ namespace JobBoard.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks if an email address is already registered.
+        /// </summary>
+        /// <param name="email">The email address to check.</param>
+        /// <returns>True if the email is not registered; false otherwise.</returns>
         [HttpGet]
         public async Task<IActionResult> IsEmailAlreadyREgistered(string email)
         {
@@ -69,6 +88,11 @@ namespace JobBoard.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Logs in an existing user.
+        /// </summary>
+        /// <param name="loginDto">The login details.</param>
+        /// <returns>Information about the logged-in user if successful; otherwise, an error message.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> PostLogin(LoginDto loginDto)
         {
@@ -96,6 +120,10 @@ namespace JobBoard.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Logs out the currently authenticated user.
+        /// </summary>
+        /// <returns>No content if successful.</returns>
         [HttpGet("logout")]
         public async Task<IActionResult> GetLogout()
         {

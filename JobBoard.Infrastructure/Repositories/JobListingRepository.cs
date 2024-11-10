@@ -102,18 +102,18 @@ namespace JobBoard.Infrastructure.Repositories
         {
             _logger.LogInformation("Deleting job listing with JobID: {JobID}", jobID);
 
-            int rowsDeleted = await _db.JobListings.Where(j => j.JobID == jobID).ExecuteDeleteAsync();
+            var jobListing = await _db.JobListings.FirstOrDefaultAsync(j => j.JobID == jobID);
 
-            if (rowsDeleted > 0)
+            if (jobListing != null)
             {
+                _db.JobListings.Remove(jobListing);
+                await _db.SaveChangesAsync();
                 _logger.LogInformation("Job listing with JobID: {JobID} deleted successfully", jobID);
-            }
-            else
-            {
-                _logger.LogWarning("No job listing found with JobID: {JobID} to delete", jobID);
+                return true;
             }
 
-            return rowsDeleted > 0;
+            _logger.LogWarning("No job listing found with JobID: {JobID} to delete", jobID);
+            return false;
         }
     }
 }

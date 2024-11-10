@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JobBoard.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd843738480776fd4e70f6d297fcfcff0671418c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b38a485884c5f4c2e3e112f94687b8f2da0e89f")]
 [assembly: System.Reflection.AssemblyProductAttribute("JobBoard.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JobBoard.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

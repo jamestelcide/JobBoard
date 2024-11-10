@@ -5,6 +5,7 @@ using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Core.Dto;
 using JobBoard.Core.ServiceContracts;
 using JobBoard.Core.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit.Abstractions;
 
@@ -18,12 +19,14 @@ namespace JobBoard.ServiceTests
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly IFixture _fixture;
 
+
         public JobListingServiceTest(ITestOutputHelper testOutputHelper)
         {
             _fixture = new Fixture();
             _jobListingRepositoryMock = new Mock<IJobListingRepository>();
             _jobListingRepository = _jobListingRepositoryMock.Object;
-            _jobListingService = new JobListingService(_jobListingRepository);
+            var loggerMock = new Mock<ILogger<JobListingService>>();
+            _jobListingService = new JobListingService(_jobListingRepository, loggerMock.Object);
             _testOutputHelper = testOutputHelper;
         }
 

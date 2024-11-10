@@ -1,8 +1,10 @@
 ﻿using AutoFixture;
 using JobBoard.Core.Dto;
 using JobBoard.Core.ServiceContracts;
+using JobBoard.Core.Services;
 using JobBoard.WebAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -20,7 +22,8 @@ namespace JobBoard.ControllerTests
             _fixture = new Fixture();
             _jobListingServiceMock = new Mock<IJobListingService>();
             _jobListingService = _jobListingServiceMock.Object;
-            _jobListingController = new JobListingController(_jobListingServiceMock.Object);
+            var loggerMock = new Mock<ILogger<JobListingController>>();
+            _jobListingController = new JobListingController(_jobListingServiceMock.Object, loggerMock.Object);
         }
 
         #region GetJobListings

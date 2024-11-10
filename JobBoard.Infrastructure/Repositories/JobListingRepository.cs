@@ -3,6 +3,10 @@ using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobBoard.Infrastructure.Repositories
 {
@@ -19,40 +23,67 @@ namespace JobBoard.Infrastructure.Repositories
 
         public async Task<JobListing> AddJobListingAsync(JobListing jobListing)
         {
-            _logger.LogInformation("AddJobListingAsync of JobListingRepository");
+            _logger.LogInformation("Adding new job listing with JobID: {JobID}", jobListing.JobID);
 
             _db.JobListings.Add(jobListing);
             await _db.SaveChangesAsync();
+
+            _logger.LogInformation("Job listing with JobID: {JobID} added successfully", jobListing.JobID);
             return jobListing;
         }
 
         public async Task<List<JobListing>> GetAllJobListingsAsync()
         {
-            _logger.LogInformation("GetAllJobListingsAsync of JobListingRepository");
+            _logger.LogInformation("Retrieving all job listings");
 
-            return await _db.JobListings.ToListAsync();
+            List<JobListing> jobListings = await _db.JobListings.ToListAsync();
+
+            _logger.LogInformation("Retrieved {Count} job listings", jobListings.Count);
+            return jobListings;
         }
 
         public async Task<List<JobListing>> GetJobListingsByCityAndStateAsync(string cityAndState)
         {
-            _logger.LogInformation("GetJobListingByCityAndStateAsync of JobListingRepository");
+            _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);
 
-            return await _db.JobListings.Where(j => (j.CityAndState == cityAndState)).ToListAsync();
+            List<JobListing> jobListings = await _db.JobListings
+                .Where(j => j.CityAndState == cityAndState)
+                .ToListAsync();
+
+            _logger.LogInformation("Retrieved {Count} job listings for city and state: {CityAndState}", jobListings.Count, cityAndState);
+            return jobListings;
         }
 
         public async Task<JobListing?> GetJobListingByJobID(Guid jobID)
         {
-            return await _db.JobListings.FirstOrDefaultAsync(j => j.JobID == jobID);
+            _logger.LogInformation("Retrieving job listing with JobID: {JobID}", jobID);
+
+            JobListing? jobListing = await _db.JobListings.FirstOrDefaultAsync(j => j.JobID == jobID);
+
+            if (jobListing == null)
+            {
+                _logger.LogWarning("No job listing found with JobID: {JobID}", jobID);
+            }
+            else
+            {
+                _logger.LogInformation("Job listing with JobID: {JobID} retrieved successfully", jobID);
+            }
+
+            return jobListing;
         }
 
         public async Task<JobListing> UpdateJobListingAsync(JobListing jobListing)
         {
-            _logger.LogInformation("UpdateJobListingAsync of JobListingRepository");
+            _logger.LogInformation("Updating job listing with JobID: {JobID}", jobListing.JobID);
 
             JobListing? matchingJobListing = await _db.JobListings
                 .FirstOrDefaultAsync(j => j.JobID == jobListing.JobID);
 
-            if (matchingJobListing == null) { return jobListing; }
+            if (matchingJobListing == null)
+            {
+                _logger.LogWarning("No job listing found with JobID: {JobID} for update", jobListing.JobID);
+                return jobListing;
+            }
 
             matchingJobListing.JobTitle = jobListing.JobTitle;
             matchingJobListing.CompanyName = jobListing.CompanyName;
@@ -62,15 +93,25 @@ namespace JobBoard.Infrastructure.Repositories
             matchingJobListing.FullDescription = jobListing.FullDescription;
 
             await _db.SaveChangesAsync();
+
+            _logger.LogInformation("Job listing with JobID: {JobID} updated successfully", jobListing.JobID);
             return matchingJobListing;
         }
 
         public async Task<bool> DeleteJobListingByIDAsync(Guid jobID)
         {
-            _logger.LogInformation("DeleteJobListingByIDAsync of JobListingRepository");
+            _logger.LogInformation("Deleting job listing with JobID: {JobID}", jobID);
 
-            _db.JobListings.RemoveRange(_db.JobListings.Where(j => j.JobID == jobID));
-            int rowsDeleted = await _db.SaveChangesAsync();
+            int rowsDeleted = await _db.JobListings.Where(j => j.JobID == jobID).ExecuteDeleteAsync();
+
+            if (rowsDeleted > 0)
+            {
+                _logger.LogInformation("Job listing with JobID: {JobID} deleted successfully", jobID);
+            }
+            else
+            {
+                _logger.LogWarning("No job listing found with JobID: {JobID} to delete", jobID);
+            }
 
             return rowsDeleted > 0;
         }

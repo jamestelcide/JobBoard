@@ -2,6 +2,11 @@
 using JobBoard.Core.ServiceContracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobBoard.WebAPI.Controllers
 {
@@ -10,10 +15,12 @@ namespace JobBoard.WebAPI.Controllers
     public class JobListingController : ControllerBase
     {
         private readonly IJobListingService _jobListingService;
+        private readonly ILogger<JobListingController> _logger;
 
-        public JobListingController(IJobListingService jobListingService)
+        public JobListingController(IJobListingService jobListingService, ILogger<JobListingController> logger)
         {
             _jobListingService = jobListingService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -23,7 +30,11 @@ namespace JobBoard.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JobListingResponseDto>>> GetJobListings()
         {
+            _logger.LogInformation("Attempting to retrieve all job listings");
+
             var allJobListings = await _jobListingService.GetAllJobListingsAsync();
+
+            _logger.LogInformation("Retrieved {Count} job listings", allJobListings.Count);
             return Ok(allJobListings);
         }
 
@@ -35,8 +46,18 @@ namespace JobBoard.WebAPI.Controllers
         [HttpGet("{cityAndState}")]
         public async Task<ActionResult<IEnumerable<JobListingResponseDto>>> GetJobListingsByCityAndState(string cityAndState)
         {
+            _logger.LogInformation("Attempting to retrieve job listings for CityAndState: {CityAndState}", cityAndState);
+
             var jobListings = await _jobListingService.GetJobListingsByCityAndState(cityAndState);
-            return jobListings.Count == 0 ? NotFound("No match found for CityAndState.") : Ok(jobListings);
+
+            if (jobListings.Count == 0)
+            {
+                _logger.LogWarning("No job listings found for CityAndState: {CityAndState}", cityAndState);
+                return NotFound("No match found for CityAndState.");
+            }
+
+            _logger.LogInformation("Retrieved {Count} job listings for CityAndState: {CityAndState}", jobListings.Count, cityAndState);
+            return Ok(jobListings);
         }
 
         /// <summary>
@@ -48,18 +69,23 @@ namespace JobBoard.WebAPI.Controllers
         [HttpPut("{jobID}")]
         public async Task<IActionResult> PutJobListing(Guid jobID, JobListingUpdateRequestDto jobListingUpdateRequest)
         {
+            _logger.LogInformation("Attempting to update job listing with JobID: {JobID}", jobID);
+
             if (jobID != jobListingUpdateRequest.JobID)
             {
+                _logger.LogWarning("JobID in URL ({UrlJobID}) does not match JobID in body ({BodyJobID})", jobID, jobListingUpdateRequest.JobID);
                 return BadRequest("JobID in the URL does not match JobID in the body.");
             }
 
             try
             {
                 var updatedJobListing = await _jobListingService.UpdateJobListingAsync(jobListingUpdateRequest);
+                _logger.LogInformation("Successfully updated job listing with JobID: {JobID}", jobID);
                 return Ok(updatedJobListing);
             }
             catch (ArgumentNullException)
             {
+                _logger.LogWarning("Job listing with JobID: {JobID} not found for update", jobID);
                 return NotFound("JobListing not found.");
             }
         }
@@ -72,12 +98,23 @@ namespace JobBoard.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<JobListingResponseDto>> PostJobListing(JobListingAddRequestDto jobListingAddRequest)
         {
+            _logger.LogInformation("Attempting to add a new job listing");
+
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Invalid model state for new job listing");
                 return BadRequest(ModelState);
             }
 
             var createdJobListing = await _jobListingService.AddJobListingAsync(jobListingAddRequest);
+
+            if (createdJobListing == null)
+            {
+                _logger.LogError("Failed to create job listing");
+                return NotFound("Failed to create job listing.");
+            }
+
+            _logger.LogInformation("Successfully created job listing with JobID: {JobID}", createdJobListing.JobID);
             return CreatedAtAction(nameof(GetJobListingsByCityAndState), new { cityAndState = createdJobListing.CityAndState }, createdJobListing);
         }
 
@@ -89,8 +126,20 @@ namespace JobBoard.WebAPI.Controllers
         [HttpDelete("{jobID}")]
         public async Task<IActionResult> DeleteJobListing(Guid jobID)
         {
+            _logger.LogInformation("Attempting to delete job listing with JobID: {JobID}", jobID);
+
             var isDeleted = await _jobListingService.DeleteJobListingAsync(jobID);
-            return isDeleted ? NoContent() : NotFound("JobListing not found.");
+
+            if (isDeleted)
+            {
+                _logger.LogInformation("Successfully deleted job listing with JobID: {JobID}", jobID);
+                return NoContent();
+            }
+            else
+            {
+                _logger.LogWarning("Job listing with JobID: {JobID} not found for deletion", jobID);
+                return NotFound("JobListing not found.");
+            }
         }
 
         /// <summary>
@@ -100,8 +149,13 @@ namespace JobBoard.WebAPI.Controllers
         /// <returns>True if JobListing exists, otherwise false.</returns>
         private async Task<bool> JobListingExists(Guid jobID)
         {
+            _logger.LogInformation("Checking if job listing exists with JobID: {JobID}", jobID);
+
             var jobListings = await _jobListingService.GetAllJobListingsAsync();
-            return jobListings.Any(j => j.JobID == jobID);
+            bool exists = jobListings.Any(j => j.JobID == jobID);
+
+            _logger.LogInformation("Job listing with JobID: {JobID} exists: {Exists}", jobID, exists);
+            return exists;
         }
     }
 }

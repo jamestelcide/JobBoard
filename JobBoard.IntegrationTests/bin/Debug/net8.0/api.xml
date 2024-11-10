@@ -4,5 +4,87 @@
         <name>JobBoard.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:JobBoard.WebAPI.Controllers.AccountController">
+            <summary>
+            Controller responsible for managing user accounts, including registration, login, and logout functionalities.
+            </summary>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.AccountController.#ctor(Microsoft.AspNetCore.Identity.UserManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.SignInManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.RoleManager{JobBoard.Core.Domain.IdentityEntities.ApplicationRole})">
+            <summary>
+            Initializes a new instance of the <see cref="T:JobBoard.WebAPI.Controllers.AccountController"/> class.
+            </summary>
+            <param name="userManager">Manages user-related operations.</param>
+            <param name="signInManager">Manages user sign-in operations.</param>
+            <param name="roleManager">Manages role-related operations.</param>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.AccountController.PostRegister(JobBoard.Core.Dto.RegisterDto)">
+            <summary>
+            Registers a new user account.
+            </summary>
+            <param name="registerDto">The registration details.</param>
+            <returns>A newly created user if successful; otherwise, an error message.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.AccountController.IsEmailAlreadyREgistered(System.String)">
+            <summary>
+            Checks if an email address is already registered.
+            </summary>
+            <param name="email">The email address to check.</param>
+            <returns>True if the email is not registered; false otherwise.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.AccountController.PostLogin(JobBoard.Core.Dto.LoginDto)">
+            <summary>
+            Logs in an existing user.
+            </summary>
+            <param name="loginDto">The login details.</param>
+            <returns>Information about the logged-in user if successful; otherwise, an error message.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.AccountController.GetLogout">
+            <summary>
+            Logs out the currently authenticated user.
+            </summary>
+            <returns>No content if successful.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListings">
+            <summary>
+            Retrieves all JobListings.
+            </summary>
+            <returns>List of JobListings.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListingsByCityAndState(System.String)">
+            <summary>
+            Retrieves JobListings based on the specified city and state.
+            </summary>
+            <param name="cityAndState">The city and state to filter JobListings by.</param>
+            <returns>List of JobListings matching the city and state.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PutJobListing(System.Guid,JobBoard.Core.Dto.JobListingUpdateRequestDto)">
+            <summary>
+            Updates an existing JobListing.
+            </summary>
+            <param name="jobID">The JobID of the JobListing to update.</param>
+            <param name="jobListingUpdateRequest">The updated JobListing details.</param>
+            <returns>Status of the update operation.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PostJobListing(JobBoard.Core.Dto.JobListingAddRequestDto)">
+            <summary>
+            Adds a new JobListing.
+            </summary>
+            <param name="jobListingAddRequest">The JobListing details to add.</param>
+            <returns>The created JobListing.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.DeleteJobListing(System.Guid)">
+            <summary>
+            Deletes a JobListing by JobID.
+            </summary>
+            <param name="jobID">The JobID of the JobListing to delete.</param>
+            <returns>Status of the delete operation.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.JobListingExists(System.Guid)">
+            <summary>
+            Checks if a JobListing with the specified JobID exists.
+            </summary>
+            <param name="jobID">The JobID of the JobListing to check.</param>
+            <returns>True if JobListing exists, otherwise false.</returns>
+        </member>
     </members>
 </doc>

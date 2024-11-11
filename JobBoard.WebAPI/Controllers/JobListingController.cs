@@ -1,7 +1,10 @@
-﻿using JobBoard.Core.Dto;
+﻿using JobBoard.Core.Domain.RepositoryContracts;
+using JobBoard.Core.Dto;
 using JobBoard.Core.ServiceContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,16 +13,28 @@ using System.Threading.Tasks;
 
 namespace JobBoard.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller for handling Job Listing operations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class JobListingController : ControllerBase
     {
         private readonly IJobListingService _jobListingService;
+        private readonly IJobListingRepository _jobListingRepository;
         private readonly ILogger<JobListingController> _logger;
 
-        public JobListingController(IJobListingService jobListingService, ILogger<JobListingController> logger)
+        /// <summary>
+        /// Initializes a new instance of the JobListingController class.
+        /// </summary>
+        /// <param name="jobListingService">Service for JobListing operations.</param>
+        /// /// <param name="jobListingRepository">Repository for JobListing operations.</param>
+        /// <param name="logger">Logger instance for logging information.</param>
+        public JobListingController(IJobListingService jobListingService, IJobListingRepository jobListingRepository, 
+            ILogger<JobListingController> logger)
         {
             _jobListingService = jobListingService;
+            _jobListingRepository = jobListingRepository;
             _logger = logger;
         }
 
@@ -83,12 +98,24 @@ namespace JobBoard.WebAPI.Controllers
                 _logger.LogInformation("Successfully updated job listing with JobID: {JobID}", jobID);
                 return Ok(updatedJobListing);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentException ex)
             {
                 _logger.LogWarning("Job listing with JobID: {JobID} not found for update", jobID);
-                return NotFound("JobListing not found.");
+                return NotFound(ex.Message); // Ensure you return NotFound with the exception message
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await JobListingExistsAsync(jobID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
+
 
         /// <summary>
         /// Adds a new JobListing.
@@ -142,20 +169,16 @@ namespace JobBoard.WebAPI.Controllers
             }
         }
 
-        /// <summary>
-        /// Checks if a JobListing with the specified JobID exists.
-        /// </summary>
-        /// <param name="jobID">The JobID of the JobListing to check.</param>
-        /// <returns>True if JobListing exists, otherwise false.</returns>
-        private async Task<bool> JobListingExists(Guid jobID)
+
+        private async Task<bool> JobListingExistsAsync(Guid jobID)
         {
             _logger.LogInformation("Checking if job listing exists with JobID: {JobID}", jobID);
 
-            var jobListings = await _jobListingService.GetAllJobListingsAsync();
-            bool exists = jobListings.Any(j => j.JobID == jobID);
+            var exists = await _jobListingRepository.DoesJobListingExistAsync(jobID);
 
             _logger.LogInformation("Job listing with JobID: {JobID} exists: {Exists}", jobID, exists);
             return exists;
         }
+
     }
 }

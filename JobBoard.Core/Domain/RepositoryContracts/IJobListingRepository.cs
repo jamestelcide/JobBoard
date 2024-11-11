@@ -47,5 +47,12 @@ namespace JobBoard.Core.Domain.RepositoryContracts
         /// <param name="jobID">JobID to search</param>
         /// <returns>Returns true, if delete is successful, otherwise false</returns>
         Task<bool> DeleteJobListingByIDAsync(Guid jobID);
+
+        /// <summary>
+        /// Checks whether a job listing exists in the database for the given JobID.
+        /// </summary>
+        /// <param name="jobID">The unique identifier of the JobListing to check.</param>
+        /// <returns>Task result containing a boolean indicating whether the JobListing exists (true) or not (false).</returns>
+        Task<bool> DoesJobListingExistAsync(Guid jobID);
     }
 }

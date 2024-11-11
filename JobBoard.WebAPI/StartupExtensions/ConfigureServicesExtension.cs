@@ -11,9 +11,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JobBoard.WebAPI.StartupExtensions
 {
+    /// <summary>
+    /// Extension methods for configuring services in the IServiceCollection
+    /// This class contains methods to register various services, middleware, and configurations 
+    /// needed for the application, including database context, repositories, identity services, 
+    /// Swagger, CORS, and authentication settings.
+    /// </summary>
     public static class ConfigureServicesExtension
     {
-        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+        /// <summary>
+        /// Configures services for the application by setting up necessary dependencies and configurations.
+        /// </summary>
+        /// <param name="services">The IServiceCollection used to register application services.</param>
+        /// <param name="configuration">The IConfiguration containing application configuration settings, such as connection strings and allowed origins.</param>
+        /// <param name="env">The IHostEnvironment used to check the environment (Development, Test, etc.).</param>
+        /// <returns>The <see cref="IServiceCollection"/> with configured services for dependency injection.</returns>
+        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -23,20 +36,31 @@ namespace JobBoard.WebAPI.StartupExtensions
             services.AddScoped<IJobListingRepository, JobListingRepository>();
             services.AddScoped<IJobListingService, JobListingService>();
 
-            services.AddEndpointsApiExplorer(); //Generates description for all endpoints
-            
-            services.AddSwaggerGen(options => {
+            services.AddEndpointsApiExplorer(); // Generates description for all endpoints
+            services.AddSwaggerGen(options =>
+            {
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
-            }); //generates OpenAPI specification
+            }); // generates OpenAPI specification
 
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 options.AddDefaultPolicy(policyBuilder =>
                 {
+                    var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+                    if (allowedOrigins != null && allowedOrigins.Length > 0)
+                    {
+                        policyBuilder.WithOrigins(allowedOrigins);
+                    }
+                    else
+                    {
+                        // Fallback if no allowed origins are provided
+                        policyBuilder.WithOrigins("*"); // Allow all origins, or set to a default value
+                    }
+
                     policyBuilder
-                    .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>())
-                    .WithHeaders("Authorization", "origin", "accept", "content-type")
-                    .WithMethods("GET", "POST", "PUT", "DELETE")
-                    ;
+                        .WithHeaders("Authorization", "origin", "accept", "content-type")
+                        .WithMethods("GET", "POST", "PUT", "DELETE");
                 });
             });
 
@@ -51,10 +75,36 @@ namespace JobBoard.WebAPI.StartupExtensions
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
-                .AddUserStore<UserStore<ApplicationUser, ApplicationRole,
-                ApplicationDbContext, Guid>>()
-                .AddRoleStore<RoleStore<ApplicationRole,
-                ApplicationDbContext, Guid>>();
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+                .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
+            services.AddAuthorization(options =>
+            {
+                // Conditionally set the fallback policy based on the environment
+                if (env.IsDevelopment() || env.IsEnvironment("Test"))
+                {
+                    // Disable authentication fallback policy for testing
+                    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                        .RequireAssertion(context => true) // Allow all requests (no authentication required)
+                        .Build();
+                }
+                else
+                {
+                    // Enforce authenticated user in other environments (like production)
+                    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser() // Require authenticated user by default
+                        .Build();
+                }
+
+                // Define the "NotAuthenticated" policy
+                options.AddPolicy("NotAuthenticated", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        return context.User.Identity != null && !context.User.Identity.IsAuthenticated;
+                    });
+                });
+            });
 
             services.ConfigureApplicationCookie(options =>
             {

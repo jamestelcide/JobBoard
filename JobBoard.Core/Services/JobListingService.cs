@@ -50,6 +50,11 @@ namespace JobBoard.Core.Services
         public async Task<List<JobListingResponseDto>> GetJobListingsByCityAndState(string? cityAndState)
         {
             _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);
+            
+            if (cityAndState == null)
+            {
+                throw new ArgumentNullException(nameof(cityAndState));
+            }
 
             List<JobListing> jobListings = await _jobListingRepository.GetJobListingsByCityAndStateAsync(cityAndState);
             _logger.LogInformation("Retrieved {Count} job listings for city and state: {CityAndState}", jobListings.Count, cityAndState);
@@ -64,7 +69,7 @@ namespace JobBoard.Core.Services
             if (jobListingUpdateRequest == null)
             {
                 _logger.LogWarning("UpdateJobListingAsync called with null jobListingUpdateRequest");
-                throw new ArgumentNullException(nameof(jobListingUpdateRequest));
+                throw new ArgumentNullException(nameof(jobListingUpdateRequest), "Job listing update request cannot be null.");
             }
 
             JobListing? matchingJobListing = await _jobListingRepository.GetJobListingByJobID(jobListingUpdateRequest.JobID);
@@ -72,7 +77,7 @@ namespace JobBoard.Core.Services
             if (matchingJobListing == null)
             {
                 _logger.LogWarning("Job listing with JobID: {JobID} not found", jobListingUpdateRequest.JobID);
-                throw new ArgumentNullException(nameof(matchingJobListing));
+                throw new ArgumentException($"Job listing with ID {jobListingUpdateRequest.JobID} not found.");
             }
 
             matchingJobListing.JobTitle = jobListingUpdateRequest.JobTitle;
@@ -94,8 +99,7 @@ namespace JobBoard.Core.Services
         {
             _logger.LogInformation("Deleting job listing with JobID: {JobID}", jobID);
 
-            JobListing jobListing = await _jobListingRepository.GetJobListingByJobID(jobID);
-
+            var jobListing = await _jobListingRepository.GetJobListingByJobID(jobID);
             if (jobListing == null)
             {
                 _logger.LogWarning("Job listing with JobID: {JobID} not found", jobID);

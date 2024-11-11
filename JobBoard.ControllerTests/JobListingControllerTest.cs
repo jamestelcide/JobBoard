@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Core.Dto;
 using JobBoard.Core.ServiceContracts;
 using JobBoard.Core.Services;
@@ -14,6 +15,8 @@ namespace JobBoard.ControllerTests
     {
         private readonly IJobListingService _jobListingService;
         private readonly Mock<IJobListingService> _jobListingServiceMock;
+        private readonly IJobListingRepository _jobListingRepository;
+        private readonly Mock<IJobListingRepository> _jobListingRepositoryMock;
         private readonly JobListingController _jobListingController;
         private readonly Fixture _fixture;
 
@@ -22,8 +25,11 @@ namespace JobBoard.ControllerTests
             _fixture = new Fixture();
             _jobListingServiceMock = new Mock<IJobListingService>();
             _jobListingService = _jobListingServiceMock.Object;
+            _jobListingRepositoryMock = new Mock<IJobListingRepository>();
+            _jobListingRepository = _jobListingRepositoryMock.Object;
             var loggerMock = new Mock<ILogger<JobListingController>>();
-            _jobListingController = new JobListingController(_jobListingServiceMock.Object, loggerMock.Object);
+            _jobListingController = new JobListingController(_jobListingServiceMock.Object,
+                _jobListingRepositoryMock.Object, loggerMock.Object);
         }
 
         #region GetJobListings
@@ -188,7 +194,7 @@ namespace JobBoard.ControllerTests
 
             // Assert
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("JobListing not found.", notFoundResult.Value);
+            Assert.Equal("Value cannot be null.", notFoundResult.Value);
         }
         #endregion
 
@@ -212,7 +218,7 @@ namespace JobBoard.ControllerTests
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             Assert.Equal(nameof(_jobListingController.GetJobListingsByCityAndState), createdAtActionResult.ActionName);
             Assert.Equal(createdJobListing, createdAtActionResult.Value);
-            Assert.Equal(createdJobListing.CityAndState, ((JobListingResponseDto)createdAtActionResult.Value).CityAndState);
+            Assert.Equal(createdJobListing.CityAndState, ((JobListingResponseDto)createdAtActionResult.Value!).CityAndState);
         }
         #endregion
 

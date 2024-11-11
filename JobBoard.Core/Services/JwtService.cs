@@ -39,27 +39,36 @@ namespace JobBoard.Core.Services
                 throw;
             }
 
-            Claim[] claims = new Claim[] {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.PersonName)
-            };
+            // Ensure that email and person name are not null
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                _logger.LogError("User email is null or empty.");
+                throw new ArgumentNullException(nameof(user.Email), "User email is required.");
+            }
 
-            SymmetricSecurityKey securityKey;
-            try
+            if (string.IsNullOrEmpty(user.PersonName))
             {
-                securityKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
-                );
-                _logger.LogDebug("Security key created successfully.");
+                _logger.LogError("User person name is null or empty.");
+                throw new ArgumentNullException(nameof(user.PersonName), "User person name is required.");
             }
-            catch (Exception ex)
+
+            Claim[] claims = new Claim[] {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+        new Claim(ClaimTypes.NameIdentifier, user.Email),
+        new Claim(ClaimTypes.NameIdentifier, user.PersonName)
+    };
+
+            string jwtKey = _configuration["Jwt:Key"]!;
+            if (string.IsNullOrEmpty(jwtKey))
             {
-                _logger.LogError(ex, "Failed to create security key from configuration.");
-                throw;
+                _logger.LogError("JWT key is missing in configuration.");
+                throw new ArgumentNullException("Jwt:Key is required in the configuration.");
             }
+
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            _logger.LogDebug("Security key created successfully.");
 
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

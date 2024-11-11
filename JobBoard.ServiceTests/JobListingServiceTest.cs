@@ -35,7 +35,7 @@ namespace JobBoard.ServiceTests
         public async Task AddJobListingAsync_NullJobListingAddRequest_ShouldThrowArgumentNullException()
         {
             //Arrange
-            JobListingAddRequestDto jobListingAddRequest = null;
+            JobListingAddRequestDto jobListingAddRequest = null!;
 
             //Act
             Func<Task> action = async () => { await _jobListingService.AddJobListingAsync(jobListingAddRequest); };

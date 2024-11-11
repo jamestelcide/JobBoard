@@ -2,7 +2,7 @@ using JobBoard.WebAPI.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureServices(builder.Configuration);
+builder.Services.ConfigureServices(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
@@ -19,4 +19,7 @@ app.MapControllers();
 
 app.Run();
 
+/// <summary>
+/// The entry point for the integration tests of the JobListingController.
+/// </summary>
 public partial class Program { }

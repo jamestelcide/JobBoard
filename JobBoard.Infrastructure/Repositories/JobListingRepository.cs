@@ -115,5 +115,10 @@ namespace JobBoard.Infrastructure.Repositories
             _logger.LogWarning("No job listing found with JobID: {JobID} to delete", jobID);
             return false;
         }
+
+        public async Task<bool> DoesJobListingExistAsync(Guid jobID)
+        {
+            return await (_db.JobListings?.AnyAsync(j => j.JobID == jobID) ?? Task.FromResult(false));
+        }
     }
 }

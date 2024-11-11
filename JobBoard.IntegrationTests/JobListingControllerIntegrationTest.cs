@@ -127,6 +127,9 @@ namespace JobBoard.IntegrationTests
             postResponse.EnsureSuccessStatusCode();
 
             var createdJobListing = await postResponse.Content.ReadFromJsonAsync<JobListingResponseDto>();
+            
+            Assert.NotNull(createdJobListing);  //Ensures the createdJobListing is not null before proceeding
+
             var jobID = createdJobListing.JobID;
 
             var updateRequest = new JobListingUpdateRequestDto
@@ -152,6 +155,7 @@ namespace JobBoard.IntegrationTests
             updatedJobListing.JobTitle.Should().Be(updateRequest.JobTitle);
             updatedJobListing.CompanyName.Should().Be(updateRequest.CompanyName);
         }
+
 
         [Fact]
         public async Task PutJobListing_ShouldReturnNotFound_WhenJobIDIsInvalid()

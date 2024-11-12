@@ -1,0 +1,43 @@
+.App {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  height: 100vh;
+}
+
+.job-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.job-item {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.job-item h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.job-item p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.easy-apply {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #0073b1;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.easy-apply:hover {
+  background-color: #005582;
+}

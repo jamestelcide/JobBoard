@@ -1,0 +1,67 @@
+.job-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.job-item:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.job-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.job-company,
+.job-location,
+.job-type,
+.job-rating,
+.job-salary {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.job-requirements {
+  font-size: 0.9rem;
+  color: #333;
+  margin-top: 1rem;
+}
+
+.job-requirements-title {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.requirement-item {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 0.2rem;
+}
+
+.apply-button {
+  display: inline-block;
+  background-color: #0073b1;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.apply-button:hover {
+  background-color: #005f8a;
+}
+
+.edit-button {
+  margin-right: 5px;
+}

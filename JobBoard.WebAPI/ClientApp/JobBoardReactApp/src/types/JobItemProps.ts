@@ -1,11 +1,11 @@
 export interface JobItemProps {
-  JobID: string;
-  JobTitle: string;
-  CompanyName: string;
-  Email: string;
-  CityAndState: string;
-  PayRange: string;
+  jobID: string;
+  jobTitle: string;
+  companyName: string;
+  email: string;
+  cityAndState: string;
+  payRange: string;
   jobType: string;
-  JobPostedDate: Date;
-  FullDescription: string;
+  jobPostedDate: Date;
+  fullDescription: string;
 }

@@ -20,7 +20,7 @@ const App: React.FC = () => {
         />
         <Route path="/add" element={<AddJobListing />} />
         <Route path="/edit/:jobID" element={<EditJobListing />} />
-        <Route path="/delete" element={<DeleteJobListing />} />
+        <Route path="/delete/:jobID" element={<DeleteJobListing />} />
       </Routes>
     </Router>
   );

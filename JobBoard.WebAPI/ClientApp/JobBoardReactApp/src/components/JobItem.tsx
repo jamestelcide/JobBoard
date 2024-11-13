@@ -32,9 +32,9 @@ const JobItem: React.FC<JobItemProps> = ({
         <Link to={`/edit/${jobID}`} className="edit-button apply-button">
           Edit Listing
         </Link>
-        <a href="/delete" className="apply-button">
+        <Link to={`/delete/${jobID}`} className="edit-button apply-button">
           Delete Listing
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -1,49 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
+import { JobTypeOptions } from "../types/JobTypeOptions";
 import "../css/JobListingForm.css";
 
 const DeleteJobListingForm: React.FC = () => {
   const [job, setJob] = useState<JobItemProps>({
-    JobID: "",
-    JobTitle: "",
-    CompanyName: "",
-    Email: "",
-    CityAndState: "",
-    PayRange: "",
-    jobType: "",
-    JobPostedDate: new Date(),
-    FullDescription: "",
+    jobID: "",
+    jobTitle: "",
+    companyName: "",
+    email: "",
+    cityAndState: "",
+    payRange: "",
+    jobType: JobTypeOptions.FullTime,
+    jobPostedDate: new Date(),
+    fullDescription: "",
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setJob((prevJob) => ({
-      ...prevJob,
-      [name]: name === "JobPostedDate" ? new Date(value) : value,
-    }));
-  };
+  const navigate = useNavigate();
+  const { jobID } = useParams<{ jobID: string }>();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Job submitted:", job);
-    // Add form submission logic here if needed
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7181/api/joblisting/id/${jobID}`
+        );
+        setJob({
+          ...response.data,
+          jobPostedDate: new Date(response.data.jobPostedDate),
+        });
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    fetchJobDetails();
+  }, [jobID]);
+
+  // Handle the delete action
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this job listing?"
+    );
+    if (confirmDelete) {
+      try {
+        await axios.delete(`https://localhost:7181/api/joblisting/${jobID}`);
+        console.log("Job deleted:", jobID);
+        navigate("/");
+      } catch (error) {
+        console.error("Error deleting job:", error);
+      }
+    }
   };
 
   return (
     <div className="job-form-container">
-      <h2 className="form-title">Are you sure you want to delete this Job Listing?</h2>
-      <form onSubmit={handleSubmit} className="job-form">
+      <h2 className="form-title">
+        Are you sure you want to delete this Job Listing?
+      </h2>
+      <form className="job-form">
         <label className="form-label">
           Job Title:
           <input
             type="text"
-            name="JobTitle"
-            value={job.JobTitle}
-            onChange={handleInputChange}
+            name="jobTitle"
+            value={job.jobTitle}
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
@@ -51,11 +75,10 @@ const DeleteJobListingForm: React.FC = () => {
           Company Name:
           <input
             type="text"
-            name="CompanyName"
-            value={job.CompanyName}
-            onChange={handleInputChange}
+            name="companyName"
+            value={job.companyName}
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
@@ -63,11 +86,10 @@ const DeleteJobListingForm: React.FC = () => {
           Email:
           <input
             type="email"
-            name="Email"
-            value={job.Email}
-            onChange={handleInputChange}
+            name="email"
+            value={job.email}
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
@@ -75,11 +97,10 @@ const DeleteJobListingForm: React.FC = () => {
           City and State:
           <input
             type="text"
-            name="CityAndState"
-            value={job.CityAndState}
-            onChange={handleInputChange}
+            name="cityAndState"
+            value={job.cityAndState}
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
@@ -87,11 +108,10 @@ const DeleteJobListingForm: React.FC = () => {
           Pay Range:
           <input
             type="text"
-            name="PayRange"
-            value={job.PayRange}
-            onChange={handleInputChange}
+            name="payRange"
+            value={job.payRange}
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
@@ -100,10 +120,9 @@ const DeleteJobListingForm: React.FC = () => {
           <input
             type="text"
             name="jobType"
-            value={job.jobType}
-            onChange={handleInputChange}
+            value={JobTypeOptions[job.jobType]}
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
@@ -111,27 +130,25 @@ const DeleteJobListingForm: React.FC = () => {
           Job Posted Date:
           <input
             type="date"
-            name="JobPostedDate"
-            value={job.JobPostedDate.toISOString().substring(0, 10)}
-            onChange={handleInputChange}
+            name="jobPostedDate"
+            value={job.jobPostedDate.toISOString().split("T")[0]} //yyyy-MM-dd format
+            readOnly
             className="form-input"
-            required
           />
         </label>
 
         <label className="form-label">
           Full Description:
           <textarea
-            name="FullDescription"
-            value={job.FullDescription}
-            onChange={handleInputChange}
+            name="fullDescription"
+            value={job.fullDescription}
+            readOnly
             className="form-textarea"
-            required
           />
         </label>
 
-        <button type="submit" className="submit-button">
-          Submit Job
+        <button type="button" className="submit-button" onClick={handleDelete}>
+          Delete Job
         </button>
       </form>
     </div>

@@ -58,7 +58,7 @@ namespace JobBoard.WebAPI.Controllers
         /// </summary>
         /// <param name="cityAndState">The city and state to filter JobListings by.</param>
         /// <returns>List of JobListings matching the city and state.</returns>
-        [HttpGet("{cityAndState}")]
+        [HttpGet("citystate/{cityAndState}")]
         public async Task<ActionResult<IEnumerable<JobListingResponseDto>>> GetJobListingsByCityAndState(string cityAndState)
         {
             _logger.LogInformation("Attempting to retrieve job listings for CityAndState: {CityAndState}", cityAndState);
@@ -73,6 +73,25 @@ namespace JobBoard.WebAPI.Controllers
 
             _logger.LogInformation("Retrieved {Count} job listings for CityAndState: {CityAndState}", jobListings.Count, cityAndState);
             return Ok(jobListings);
+        }
+
+        /// <summary>
+        /// Retrieves a JobListing by its unique identifier (JobID).
+        /// </summary>
+        /// <param name="jobID">The unique identifier of the JobListing.</param>
+        /// <returns>
+        /// Returns a 200 OK response with the job listing if found, 
+        /// or a 404 Not Found response if no job listing exists with the provided JobID.
+        /// </returns>
+        [HttpGet("id/{jobID}")]
+        public async Task<IActionResult> GetJobListingByID(Guid jobID)
+        {
+            var jobListing = await _jobListingService.GetJobListingByIDAsync(jobID);
+            if (jobListing == null)
+            {
+                return NotFound($"No job listing found with JobID: {jobID}");
+            }
+            return Ok(jobListing);
         }
 
         /// <summary>

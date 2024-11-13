@@ -5,7 +5,7 @@ export interface JobItemProps {
   email: string;
   cityAndState: string;
   payRange: string;
-  jobType: string;
+  jobType: number;
   jobPostedDate: Date;
   fullDescription: string;
 }

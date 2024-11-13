@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../css/JobItem.css";
 import { JobItemProps } from "../types/JobItemProps";
 
 const JobItem: React.FC<JobItemProps> = ({
+  jobID,
   jobTitle,
   companyName,
   email,
@@ -27,9 +29,9 @@ const JobItem: React.FC<JobItemProps> = ({
       </a>
       <br></br>
       <div>
-        <a href="/edit" className=" edit-button apply-button">
+        <Link to={`/edit/${jobID}`} className="edit-button apply-button">
           Edit Listing
-        </a>
+        </Link>
         <a href="/delete" className="apply-button">
           Delete Listing
         </a>

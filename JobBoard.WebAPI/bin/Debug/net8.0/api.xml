@@ -71,6 +71,16 @@
             <param name="cityAndState">The city and state to filter JobListings by.</param>
             <returns>List of JobListings matching the city and state.</returns>
         </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListingByID(System.Guid)">
+            <summary>
+            Retrieves a JobListing by its unique identifier (JobID).
+            </summary>
+            <param name="jobID">The unique identifier of the JobListing.</param>
+            <returns>
+            Returns a 200 OK response with the job listing if found, 
+            or a 404 Not Found response if no job listing exists with the provided JobID.
+            </returns>
+        </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PutJobListing(System.Guid,JobBoard.Core.Dto.JobListingUpdateRequestDto)">
             <summary>
             Updates an existing JobListing.

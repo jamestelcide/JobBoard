@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
+import { JobTypeOptions } from "../types/JobTypeOptions";
 import "../css/JobListingForm.css";
 
 const AddJobListingForm: React.FC = () => {
@@ -12,7 +13,7 @@ const AddJobListingForm: React.FC = () => {
     email: "",
     cityAndState: "",
     payRange: "",
-    jobType: "",
+    jobType: JobTypeOptions.FullTime,
     jobPostedDate: new Date(),
     fullDescription: "",
   });
@@ -20,7 +21,9 @@ const AddJobListingForm: React.FC = () => {
   const navigate = useNavigate();
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setJob((prevJob) => ({
@@ -32,9 +35,15 @@ const AddJobListingForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const updatedJob = {
+        ...job,
+        jobType: parseInt(job.jobType.toString(), 10),
+        jobPostedDate: job.jobPostedDate.toISOString(),
+      };
+      console.log("Sending job data:", updatedJob);
       const response = await axios.post(
         "https://localhost:7181/api/joblisting",
-        job
+        updatedJob
       );
       console.log("Job submitted:", response.data);
       setJob({
@@ -44,7 +53,7 @@ const AddJobListingForm: React.FC = () => {
         email: "",
         cityAndState: "",
         payRange: "",
-        jobType: "",
+        jobType: JobTypeOptions.FullTime,
         jobPostedDate: new Date(),
         fullDescription: "",
       });
@@ -120,14 +129,18 @@ const AddJobListingForm: React.FC = () => {
 
         <label className="form-label">
           Job Type:
-          <input
-            type="text"
+          <select
             name="jobType"
             value={job.jobType}
             onChange={handleInputChange}
             className="form-input"
             required
-          />
+          >
+            <option value={JobTypeOptions.FullTime}>FullTime</option>
+            <option value={JobTypeOptions.PartTime}>PartTime</option>
+            <option value={JobTypeOptions.Internship}>Internship</option>
+            <option value={JobTypeOptions.Remote}>Remote</option>
+          </select>
         </label>
 
         <label className="form-label">
@@ -135,7 +148,7 @@ const AddJobListingForm: React.FC = () => {
           <input
             type="date"
             name="jobPostedDate"
-            value={job.jobPostedDate.toISOString().substring(0, 10)}
+            value={job.jobPostedDate.toISOString().substring(0, 10)} // Format the date as yyyy-MM-dd
             onChange={handleInputChange}
             className="form-input"
             required

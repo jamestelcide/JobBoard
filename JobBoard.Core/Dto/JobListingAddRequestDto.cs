@@ -1,4 +1,5 @@
 ﻿using JobBoard.Core.Domain.Entities;
+using JobBoard.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobBoard.Core.Dto
@@ -26,7 +27,7 @@ namespace JobBoard.Core.Dto
         public string PayRange { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Job type can not be blank!")]
-        public string JobType { get; set; } = string.Empty;
+        public JobTypeOptions JobType { get; set; }
 
         [Required(ErrorMessage = "JobPostedDate can not be blank!")]
         public DateTime JobPostedDate { get; set; }
@@ -47,7 +48,7 @@ namespace JobBoard.Core.Dto
                 Email = Email,
                 CityAndState = CityAndState,
                 PayRange = PayRange,
-                JobType = JobType,
+                JobType = JobType.ToString(),
                 JobPostedDate = JobPostedDate,
                 FullDescription = FullDescription
             };

@@ -125,6 +125,45 @@ namespace JobBoard.ServiceTests
 
         #endregion
 
+        #region GetJobListingByIDAsync
+        [Fact]
+        public async Task GetJobListingByIDAsync_ShouldReturnNull_WhenJobIDIsNull()
+        {
+            // Arrange
+            Guid? jobID = null;
+
+            // Act
+            var result = await _jobListingService.GetJobListingByIDAsync(jobID);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetJobListingByIDAsync_ShouldReturnJobListingResponseDto_WhenJobListingFound()
+        {
+            // Arrange
+            var jobID = Guid.NewGuid();
+            var jobListing = _fixture.Build<JobListing>()
+                .With(j => j.JobID, jobID)
+                .With(j => j.JobTitle, "Software Engineer")
+                .With(j => j.CompanyName, "Tech Corp")
+                .Create();
+
+            var expectedJobListingResponse = jobListing.ToJobListingResponse();
+
+            _jobListingRepositoryMock.Setup(j => j.GetJobListingByJobID(jobID))
+                .ReturnsAsync(jobListing);
+
+            // Act
+            var result = await _jobListingService.GetJobListingByIDAsync(jobID);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(expectedJobListingResponse, options => options.ExcludingMissingMembers());
+        }
+        #endregion
+
         #region GetJobListingsByCityAndState
         [Fact]
         public async Task GetJobListingsByCityAndState_WithCityAndState_ToBeSuccessful()

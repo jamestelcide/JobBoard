@@ -1,34 +1,81 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
 import "../css/JobListingForm.css";
 
+enum JobTypeOptions {
+  FullTime = 0,
+  PartTime = 1,
+  Internship = 2,
+  Remote = 3,
+}
+
 const EditJobListingForm: React.FC = () => {
   const [job, setJob] = useState<JobItemProps>({
-    JobID: "",
-    JobTitle: "",
-    CompanyName: "",
-    Email: "",
-    CityAndState: "",
-    PayRange: "",
-    jobType: "",
-    JobPostedDate: new Date(),
-    FullDescription: "",
+    jobID: "",
+    jobTitle: "",
+    companyName: "",
+    email: "",
+    cityAndState: "",
+    payRange: "",
+    jobType: JobTypeOptions.FullTime,
+    jobPostedDate: new Date(),
+    fullDescription: "",
   });
 
+  const navigate = useNavigate();
+  const { jobID } = useParams<{ jobID: string }>();
+
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7181/api/joblisting/id/${jobID}`
+        );
+        setJob({
+          ...response.data,
+          jobPostedDate: new Date(response.data.jobPostedDate),
+        });
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    fetchJobDetails();
+  }, [jobID]);
+
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setJob((prevJob) => ({
       ...prevJob,
-      [name]: name === "JobPostedDate" ? new Date(value) : value,
+      [name]: name === "jobPostedDate" ? new Date(value) : value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Job submitted:", job);
-    // Add form submission logic here if needed
+
+    const updatedJob = {
+      ...job,
+      jobType: parseInt(job.jobType.toString(), 10),
+      jobPostedDate: job.jobPostedDate.toISOString(),
+    };
+
+    try {
+      const response = await axios.put(
+        `https://localhost:7181/api/joblisting/${jobID}`,
+        updatedJob
+      );
+      console.log("Job updated:", response.data);
+      navigate("/");
+    } catch (error) {
+      console.error("Error updating job:", error);
+    }
   };
 
   return (
@@ -39,8 +86,8 @@ const EditJobListingForm: React.FC = () => {
           Job Title:
           <input
             type="text"
-            name="JobTitle"
-            value={job.JobTitle}
+            name="jobTitle"
+            value={job.jobTitle}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -51,8 +98,8 @@ const EditJobListingForm: React.FC = () => {
           Company Name:
           <input
             type="text"
-            name="CompanyName"
-            value={job.CompanyName}
+            name="companyName"
+            value={job.companyName}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -63,8 +110,8 @@ const EditJobListingForm: React.FC = () => {
           Email:
           <input
             type="email"
-            name="Email"
-            value={job.Email}
+            name="email"
+            value={job.email}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -75,8 +122,8 @@ const EditJobListingForm: React.FC = () => {
           City and State:
           <input
             type="text"
-            name="CityAndState"
-            value={job.CityAndState}
+            name="cityAndState"
+            value={job.cityAndState}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -87,8 +134,8 @@ const EditJobListingForm: React.FC = () => {
           Pay Range:
           <input
             type="text"
-            name="PayRange"
-            value={job.PayRange}
+            name="payRange"
+            value={job.payRange}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -97,23 +144,27 @@ const EditJobListingForm: React.FC = () => {
 
         <label className="form-label">
           Job Type:
-          <input
-            type="text"
+          <select
             name="jobType"
             value={job.jobType}
             onChange={handleInputChange}
             className="form-input"
             required
-          />
+          >
+            <option value={JobTypeOptions.FullTime}>FullTime</option>
+            <option value={JobTypeOptions.PartTime}>PartTime</option>
+            <option value={JobTypeOptions.Internship}>Internship</option>
+            <option value={JobTypeOptions.Remote}>Remote</option>
+          </select>
         </label>
 
         <label className="form-label">
           Job Posted Date:
           <input
             type="date"
-            name="JobPostedDate"
-            value={job.JobPostedDate.toISOString().substring(0, 10)}
-            onChange={handleInputChange}
+            name="jobPostedDate"
+            value={job.jobPostedDate.toISOString().split("T")[0]} //yyyy-MM-dd format
+            readOnly
             className="form-input"
             required
           />
@@ -122,8 +173,8 @@ const EditJobListingForm: React.FC = () => {
         <label className="form-label">
           Full Description:
           <textarea
-            name="FullDescription"
-            value={job.FullDescription}
+            name="fullDescription"
+            value={job.fullDescription}
             onChange={handleInputChange}
             className="form-textarea"
             required
@@ -131,7 +182,7 @@ const EditJobListingForm: React.FC = () => {
         </label>
 
         <button type="submit" className="submit-button">
-          Submit Job
+          Update Job
         </button>
       </form>
     </div>

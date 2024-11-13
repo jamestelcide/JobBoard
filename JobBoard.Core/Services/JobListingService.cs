@@ -47,6 +47,17 @@ namespace JobBoard.Core.Services
             return jobListings.Select(j => j.ToJobListingResponse()).ToList();
         }
 
+        public async Task<JobListingResponseDto?> GetJobListingByIDAsync(Guid? jobID)
+        {
+            if (jobID == null) { return null; }
+
+            JobListing? jobListing = await _jobListingRepository.GetJobListingByJobID(jobID.Value);
+
+            if (jobListing == null) { return null; }
+
+            return jobListing.ToJobListingResponse();
+        }
+
         public async Task<List<JobListingResponseDto>> GetJobListingsByCityAndState(string? cityAndState)
         {
             _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);

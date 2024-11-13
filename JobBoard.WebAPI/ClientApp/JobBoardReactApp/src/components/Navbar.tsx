@@ -14,9 +14,9 @@ const Navbar: React.FC = () => {
         </nav>
       </div>
       <div className="nav-right">
-        <Link to="/">Sign in</Link>
+        <Link to="/login">Sign in</Link>
         <span className="separator">|</span>
-        <Link to="/">Logout</Link>
+        <Link to="/logout">Logout</Link>
       </div>
     </header>
   );

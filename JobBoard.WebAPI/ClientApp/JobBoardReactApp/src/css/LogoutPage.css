@@ -1,0 +1,28 @@
+.logout-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.logout-container h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.logout-container p {
+  font-size: 18px;
+  color: #666;
+  font-style: italic;
+}
+
+@keyframes countdown-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.logout-container p span {
+  color: #d9534f;
+  font-weight: bold;
+  animation: countdown-blink 1s infinite;
+}

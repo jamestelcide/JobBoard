@@ -1,19 +1,23 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
 import "../css/JobListingForm.css";
 
 const AddJobListingForm: React.FC = () => {
   const [job, setJob] = useState<JobItemProps>({
-    JobID: "",
-    JobTitle: "",
-    CompanyName: "",
-    Email: "",
-    CityAndState: "",
-    PayRange: "",
+    jobID: "",
+    jobTitle: "",
+    companyName: "",
+    email: "",
+    cityAndState: "",
+    payRange: "",
     jobType: "",
-    JobPostedDate: new Date(),
-    FullDescription: "",
+    jobPostedDate: new Date(),
+    fullDescription: "",
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -21,14 +25,33 @@ const AddJobListingForm: React.FC = () => {
     const { name, value } = e.target;
     setJob((prevJob) => ({
       ...prevJob,
-      [name]: name === "JobPostedDate" ? new Date(value) : value,
+      [name]: name === "jobPostedDate" ? new Date(value) : value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Job submitted:", job);
-    // Add form submission logic here if needed
+    try {
+      const response = await axios.post(
+        "https://localhost:7181/api/joblisting",
+        job
+      );
+      console.log("Job submitted:", response.data);
+      setJob({
+        jobID: "",
+        jobTitle: "",
+        companyName: "",
+        email: "",
+        cityAndState: "",
+        payRange: "",
+        jobType: "",
+        jobPostedDate: new Date(),
+        fullDescription: "",
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Error submitting job:", error);
+    }
   };
 
   return (
@@ -39,8 +62,8 @@ const AddJobListingForm: React.FC = () => {
           Job Title:
           <input
             type="text"
-            name="JobTitle"
-            value={job.JobTitle}
+            name="jobTitle"
+            value={job.jobTitle}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -51,8 +74,8 @@ const AddJobListingForm: React.FC = () => {
           Company Name:
           <input
             type="text"
-            name="CompanyName"
-            value={job.CompanyName}
+            name="companyName"
+            value={job.companyName}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -63,8 +86,8 @@ const AddJobListingForm: React.FC = () => {
           Email:
           <input
             type="email"
-            name="Email"
-            value={job.Email}
+            name="email"
+            value={job.email}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -75,8 +98,8 @@ const AddJobListingForm: React.FC = () => {
           City and State:
           <input
             type="text"
-            name="CityAndState"
-            value={job.CityAndState}
+            name="cityAndState"
+            value={job.cityAndState}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -87,8 +110,8 @@ const AddJobListingForm: React.FC = () => {
           Pay Range:
           <input
             type="text"
-            name="PayRange"
-            value={job.PayRange}
+            name="payRange"
+            value={job.payRange}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -111,8 +134,8 @@ const AddJobListingForm: React.FC = () => {
           Job Posted Date:
           <input
             type="date"
-            name="JobPostedDate"
-            value={job.JobPostedDate.toISOString().substring(0, 10)}
+            name="jobPostedDate"
+            value={job.jobPostedDate.toISOString().substring(0, 10)}
             onChange={handleInputChange}
             className="form-input"
             required
@@ -122,8 +145,8 @@ const AddJobListingForm: React.FC = () => {
         <label className="form-label">
           Full Description:
           <textarea
-            name="FullDescription"
-            value={job.FullDescription}
+            name="fullDescription"
+            value={job.fullDescription}
             onChange={handleInputChange}
             className="form-textarea"
             required

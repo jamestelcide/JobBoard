@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../css/SearchBar.css";
 
 const SearchBar: React.FC = () => {
@@ -18,7 +19,8 @@ const SearchBar: React.FC = () => {
         />
         <button className="search-button">Search</button>
         <div className="post-listing">
-          <a href="#">Create Job Listing</a> - It only takes a few seconds
+          <Link to="/add">Create Job Listing</Link> - It only takes a few
+          seconds
         </div>
       </div>
     </div>

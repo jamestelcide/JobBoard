@@ -2,14 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
+import { JobTypeOptions } from "../types/JobTypeOptions"; // import JobTypeOptions from the correct path
 import "../css/JobListingForm.css";
-
-enum JobTypeOptions {
-  FullTime = 0,
-  PartTime = 1,
-  Internship = 2,
-  Remote = 3,
-}
 
 const EditJobListingForm: React.FC = () => {
   const [job, setJob] = useState<JobItemProps>({

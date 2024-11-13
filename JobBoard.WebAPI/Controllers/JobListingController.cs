@@ -135,7 +135,6 @@ namespace JobBoard.WebAPI.Controllers
             }
         }
 
-
         /// <summary>
         /// Adds a new JobListing.
         /// </summary>
@@ -187,7 +186,6 @@ namespace JobBoard.WebAPI.Controllers
                 return NotFound("JobListing not found.");
             }
         }
-
 
         private async Task<bool> JobListingExistsAsync(Guid jobID)
         {

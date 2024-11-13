@@ -275,3 +275,8 @@ C:\devops\repos\JobBoard\JobBoard.WebAPI\obj\Debug\net8.0\JobBoard.WebAPI.csproj
 C:\devops\repos\JobBoard\JobBoard.WebAPI\obj\Debug\net8.0\JobBoard.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\devops\repos\JobBoard\JobBoard.WebAPI\obj\Debug\net8.0\JobBoard.DAA4F1BA.Up2Date
 C:\devops\repos\JobBoard\JobBoard.WebAPI\bin\Debug\net8.0\api.xml
+C:\devops\repos\JobBoard\JobBoard.WebAPI\bin\Debug\net8.0\ClientApp\JobBoardReactApp\package-lock.json
+C:\devops\repos\JobBoard\JobBoard.WebAPI\bin\Debug\net8.0\ClientApp\JobBoardReactApp\package.json
+C:\devops\repos\JobBoard\JobBoard.WebAPI\bin\Debug\net8.0\ClientApp\JobBoardReactApp\tsconfig.app.json
+C:\devops\repos\JobBoard\JobBoard.WebAPI\bin\Debug\net8.0\ClientApp\JobBoardReactApp\tsconfig.json
+C:\devops\repos\JobBoard\JobBoard.WebAPI\bin\Debug\net8.0\ClientApp\JobBoardReactApp\tsconfig.node.json

@@ -1,40 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import JobItem from "./JobItem";
 import "../css/JobList.css";
+import { JobItemProps } from "../types/JobItemProps";
 
 const JobList: React.FC = () => {
-  const jobs = [
-    {
-      JobID: "BFBC1319-B732-4D1C-A23B-AFB473014F1F",
-      JobTitle: "Software Engineer",
-      CompanyName: "Tech Innovations",
-      Email: "hr@techinnovations.com",
-      CityAndState: "Atlanta, GA",
-      PayRange: "$80,000 - $120,000",
-      jobType: "FullTime",
-      JobPostedDate: new Date("2024-10-20T00:00:00Z"),
-      FullDescription:
-        "Seeking a software engineer with experience in web and mobile application development. Must be proficient in C# and JavaScript.",
-    },
-    {
-      JobID: "F358F000-46D2-4D56-95BC-05375645A6FC",
-      JobTitle: "Data Scientist",
-      CompanyName: "Tech Innovations",
-      Email: "hr@techinnovations.com",
-      CityAndState: "New York, NY",
-      PayRange: "$100,000 - $130,000",
-      jobType: "FullTime",
-      JobPostedDate: new Date("2024-10-20T00:00:00Z"),
-      FullDescription:
-        "Seeking a software engineer with experience in web and mobile application development. Must be proficient in C# and JavaScript.",
-    },
-  ];
+  const [jobs, setJobs] = useState<JobItemProps[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get<JobItemProps[]>(
+          "https://localhost:7181/api/joblisting"
+        );
+        setJobs(response.data);
+      } catch (error) {
+        setError("Failed to load job listings.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  if (loading) return <h3>Loading...</h3>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="job-list">
-      {jobs.map((job, index) => (
-        <JobItem key={index} {...job} />
+      {jobs.map((job) => (
+        <JobItem key={job.jobID} {...job} />
       ))}
+      
     </div>
   );
 };

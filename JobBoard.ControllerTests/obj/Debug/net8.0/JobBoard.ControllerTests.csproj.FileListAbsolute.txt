@@ -355,3 +355,8 @@ C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\JobBoard.WebA
 C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\JobBoard.WebAPI.pdb
 C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\JobBoard.Core.pdb
 C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\JobBoard.Infrastructure.pdb
+C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\ClientApp\JobBoardReactApp\package-lock.json
+C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\ClientApp\JobBoardReactApp\package.json
+C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\ClientApp\JobBoardReactApp\tsconfig.app.json
+C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\ClientApp\JobBoardReactApp\tsconfig.json
+C:\devops\repos\JobBoard\JobBoard.ControllerTests\bin\Debug\net8.0\ClientApp\JobBoardReactApp\tsconfig.node.json

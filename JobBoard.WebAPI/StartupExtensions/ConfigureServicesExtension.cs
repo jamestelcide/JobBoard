@@ -4,10 +4,14 @@ using JobBoard.Core.ServiceContracts;
 using JobBoard.Core.Services;
 using JobBoard.Infrastructure.DbContext;
 using JobBoard.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JobBoard.WebAPI.StartupExtensions
 {
@@ -35,6 +39,18 @@ namespace JobBoard.WebAPI.StartupExtensions
 
             services.AddScoped<IJobListingRepository, JobListingRepository>();
             services.AddScoped<IJobListingService, JobListingService>();
+            services.AddTransient<IJwtService, JwtService>();
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new ProducesAttribute("application/json"));
+                options.Filters.Add(new ConsumesAttribute("application/json"));
+
+                //Authorization policy
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddXmlSerializerFormatters();
 
             services.AddEndpointsApiExplorer(); // Generates description for all endpoints
             services.AddSwaggerGen(options =>
@@ -78,37 +94,28 @@ namespace JobBoard.WebAPI.StartupExtensions
                 .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
                 .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
-            services.AddAuthorization(options =>
+            //JWT
+            services.AddAuthentication(options =>
             {
-                // Conditionally set the fallback policy based on the environment
-                if (env.IsDevelopment() || env.IsEnvironment("Test"))
-                {
-                    // Disable authentication fallback policy for testing
-                    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                        .RequireAssertion(context => true) // Allow all requests (no authentication required)
-                        .Build();
-                }
-                else
-                {
-                    // Enforce authenticated user in other environments (like production)
-                    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser() // Require authenticated user by default
-                        .Build();
-                }
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 
-                // Define the "NotAuthenticated" policy
-                options.AddPolicy("NotAuthenticated", policy =>
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    policy.RequireAssertion(context =>
-                    {
-                        return context.User.Identity != null && !context.User.Identity.IsAuthenticated;
-                    });
-                });
+                    ValidateAudience = true,
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                };
             });
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
+            services.AddAuthorization(options => {
             });
 
             services.AddControllers();

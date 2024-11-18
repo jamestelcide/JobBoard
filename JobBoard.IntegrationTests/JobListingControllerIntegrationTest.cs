@@ -27,7 +27,7 @@ namespace JobBoard.IntegrationTests
                 Email = "careers@innovativesolutions.com",
                 CityAndState = "Austin, TX",
                 PayRange = "$85,000 - $125,000",
-                JobType = "FullTime",
+                JobType = JobTypeOptions.FullTime,
                 JobPostedDate = DateTime.UtcNow,
                 FullDescription = "Looking for a software engineer experienced in C# and .NET."
             };
@@ -77,7 +77,7 @@ namespace JobBoard.IntegrationTests
                 Email = "careers@innovativesolutions.com",
                 CityAndState = "Atlanta, GA",
                 PayRange = "$85,000 - $125,000",
-                JobType = "FullTime",
+                JobType = JobTypeOptions.FullTime,
                 JobPostedDate = DateTime.UtcNow,
                 FullDescription = "Looking for a software engineer experienced in C# and .NET."
             };
@@ -118,7 +118,7 @@ namespace JobBoard.IntegrationTests
                 Email = "hr@techinnovators.com",
                 CityAndState = "San Francisco, CA",
                 PayRange = "$70,000 - $90,000",
-                JobType = "Fulltime",
+                JobType = JobTypeOptions.FullTime,
                 JobPostedDate = DateTime.UtcNow,
                 FullDescription = "An entry-level position for enthusiastic developers."
             };
@@ -216,7 +216,7 @@ namespace JobBoard.IntegrationTests
                 Email = "hr@techcorp.com",
                 CityAndState = "Los Angeles, CA",
                 PayRange = "$90,000 - $110,000",
-                JobType = "FullTime",
+                JobType = JobTypeOptions.FullTime,
                 JobPostedDate = DateTime.UtcNow,
                 FullDescription = "Looking for a test engineer with experience in .NET testing."
             };

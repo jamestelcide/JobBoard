@@ -1,11 +1,13 @@
 ﻿using JobBoard.Core.Domain.IdentityEntities;
 using JobBoard.Core.Dto;
+using JobBoard.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace JobBoard.WebAPI.Controllers
@@ -22,23 +24,27 @@ namespace JobBoard.WebAPI.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ILogger<AccountController> _logger;
+        private readonly IJwtService _jwtService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AccountController"/> class.
+        /// Initializes a new instance of the AccountController class.
         /// </summary>
         /// <param name="userManager">Manages user-related operations.</param>
         /// <param name="signInManager">Manages user sign-in operations.</param>
         /// <param name="roleManager">Manages role-related operations.</param>
         /// <param name="logger">Logger for logging events and errors.</param>
+        /// <param name="jwtService">The service responsible for handling JWT authentication operations.</param>
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<ApplicationRole> roleManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger, 
+            IJwtService jwtService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
+            _jwtService = jwtService;
         }
 
         /// <summary>
@@ -58,7 +64,7 @@ namespace JobBoard.WebAPI.Controllers
                 return Problem(errorMessage);
             }
 
-            var user = new ApplicationUser
+            ApplicationUser user = new ApplicationUser()
             {
                 Email = registerDto.Email,
                 PhoneNumber = registerDto.PhoneNumber,
@@ -71,13 +77,18 @@ namespace JobBoard.WebAPI.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                _logger.LogInformation("User registration successful for email: {Email}", registerDto.Email);
-                return Ok(user);
+                var authenticationResponse = _jwtService.CreateJwtToken(user);
+                user.RefreshToken = authenticationResponse.RefreshToken;
+                user.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationDateTime;
+                await _userManager.UpdateAsync(user);
+
+                _logger.LogInformation("User sign in successful for email: {Email}", registerDto.Email);
+                return Ok(authenticationResponse);
             }
             else
             {
                 string errorMessage = string.Join(" | ", result.Errors.Select(e => e.Description));
-                _logger.LogError("User registration failed for email: {Email} with errors: {Errors}", registerDto.Email, errorMessage);
+                _logger.LogError("User sign in failed for email: {Email} with errors: {Errors}", registerDto.Email, errorMessage);
                 return Problem(errorMessage);
             }
         }
@@ -134,8 +145,17 @@ namespace JobBoard.WebAPI.Controllers
                     return NoContent();
                 }
 
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                var authenticationResponse = _jwtService.CreateJwtToken(user);
+
+                user.RefreshToken = authenticationResponse.RefreshToken;
+
+                user.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationDateTime;
+                await _userManager.UpdateAsync(user);
+
                 _logger.LogInformation("User login successful for email: {Email}", loginDto.Email);
-                return Ok(new { personName = user.PersonName, email = user.Email });
+                return Ok(authenticationResponse);
             }
             else
             {
@@ -157,6 +177,49 @@ namespace JobBoard.WebAPI.Controllers
 
             _logger.LogInformation("User logged out successfully");
             return NoContent();
+        }
+
+        /// <summary>
+        /// Generates a new JWT access token and refresh token for a client request.
+        /// Validates the provided token and refresh token, and ensures the user exists and the refresh token is valid.
+        /// If successful, updates the user's refresh token and expiration date, and returns the new authentication details.
+        /// </summary>
+        /// <param name="tokenModel">The model containing the current JWT token and refresh token.</param>
+        /// <returns>
+        /// Returns BadResult if the request is invalid, the token is invalid, or the refresh token is expired.
+        /// Returns OK with the new AuthenticationResponse containing the tokens if the operation is successful.
+        /// </returns>
+        [HttpPost("generate-new-jwt-token")]
+        public async Task<IActionResult> GenerateNewAccessToken(TokenModel tokenModel)
+        {
+            if (tokenModel == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            ClaimsPrincipal? principal = _jwtService.GetPrincipalFromJwtToken(tokenModel.Token);
+            if (principal == null)
+            {
+                return BadRequest("Invalid jwt access token");
+            }
+
+            string? email = principal.FindFirstValue(ClaimTypes.Email);
+
+            ApplicationUser? user = await _userManager.FindByNameAsync(email);
+
+            if (user == null || user.RefreshToken != tokenModel.RefreshToken || user.RefreshTokenExpirationDateTime <= DateTime.Now)
+            {
+                return BadRequest("Invalid refresh token");
+            }
+
+            AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(user);
+
+            user.RefreshToken = authenticationResponse.RefreshToken;
+            user.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationDateTime;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok(authenticationResponse);
         }
     }
 }

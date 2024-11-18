@@ -9,14 +9,15 @@
             Controller responsible for managing user accounts, including registration, login, and logout functionalities.
             </summary>
         </member>
-        <member name="M:JobBoard.WebAPI.Controllers.AccountController.#ctor(Microsoft.AspNetCore.Identity.UserManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.SignInManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.RoleManager{JobBoard.Core.Domain.IdentityEntities.ApplicationRole},Microsoft.Extensions.Logging.ILogger{JobBoard.WebAPI.Controllers.AccountController})">
+        <member name="M:JobBoard.WebAPI.Controllers.AccountController.#ctor(Microsoft.AspNetCore.Identity.UserManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.SignInManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.RoleManager{JobBoard.Core.Domain.IdentityEntities.ApplicationRole},Microsoft.Extensions.Logging.ILogger{JobBoard.WebAPI.Controllers.AccountController},JobBoard.Core.ServiceContracts.IJwtService)">
             <summary>
-            Initializes a new instance of the <see cref="T:JobBoard.WebAPI.Controllers.AccountController"/> class.
+            Initializes a new instance of the AccountController class.
             </summary>
             <param name="userManager">Manages user-related operations.</param>
             <param name="signInManager">Manages user sign-in operations.</param>
             <param name="roleManager">Manages role-related operations.</param>
             <param name="logger">Logger for logging events and errors.</param>
+            <param name="jwtService">The service responsible for handling JWT authentication operations.</param>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.PostRegister(JobBoard.Core.Dto.RegisterDto)">
             <summary>
@@ -70,6 +71,16 @@
             </summary>
             <param name="cityAndState">The city and state to filter JobListings by.</param>
             <returns>List of JobListings matching the city and state.</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListingByID(System.Guid)">
+            <summary>
+            Retrieves a JobListing by its unique identifier (JobID).
+            </summary>
+            <param name="jobID">The unique identifier of the JobListing.</param>
+            <returns>
+            Returns a 200 OK response with the job listing if found, 
+            or a 404 Not Found response if no job listing exists with the provided JobID.
+            </returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PutJobListing(System.Guid,JobBoard.Core.Dto.JobListingUpdateRequestDto)">
             <summary>

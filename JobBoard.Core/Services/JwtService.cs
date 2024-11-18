@@ -11,7 +11,7 @@ using System.Text;
 
 namespace JobBoard.Core.Services
 {
-    internal class JwtService : IJwtService
+    public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<JwtService> _logger;

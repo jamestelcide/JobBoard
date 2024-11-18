@@ -39,6 +39,7 @@ namespace JobBoard.WebAPI.StartupExtensions
 
             services.AddScoped<IJobListingRepository, JobListingRepository>();
             services.AddScoped<IJobListingService, JobListingService>();
+            services.AddTransient<IJwtService, JwtService>();
 
             services.AddControllers(options =>
             {
@@ -50,8 +51,6 @@ namespace JobBoard.WebAPI.StartupExtensions
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddXmlSerializerFormatters();
-
-            services.AddTransient<IJwtService, IJwtService>();
 
             services.AddEndpointsApiExplorer(); // Generates description for all endpoints
             services.AddSwaggerGen(options =>
@@ -87,7 +86,7 @@ namespace JobBoard.WebAPI.StartupExtensions
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = true;
-                options.Password.RequireDigit = true;
+                options.Password.RequireDigit = false;
                 options.Password.RequiredUniqueChars = 3;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -117,11 +116,6 @@ namespace JobBoard.WebAPI.StartupExtensions
             });
 
             services.AddAuthorization(options => {
-            });
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
             });
 
             services.AddControllers();

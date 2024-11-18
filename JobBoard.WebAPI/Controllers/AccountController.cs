@@ -155,7 +155,7 @@ namespace JobBoard.WebAPI.Controllers
                 await _userManager.UpdateAsync(user);
 
                 _logger.LogInformation("User login successful for email: {Email}", loginDto.Email);
-                return Ok(new { personName = user.PersonName, email = user.Email });
+                return Ok(authenticationResponse);
             }
             else
             {
@@ -179,6 +179,16 @@ namespace JobBoard.WebAPI.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Generates a new JWT access token and refresh token for a client request.
+        /// Validates the provided token and refresh token, and ensures the user exists and the refresh token is valid.
+        /// If successful, updates the user's refresh token and expiration date, and returns the new authentication details.
+        /// </summary>
+        /// <param name="tokenModel">The model containing the current JWT token and refresh token.</param>
+        /// <returns>
+        /// Returns BadResult if the request is invalid, the token is invalid, or the refresh token is expired.
+        /// Returns OK with the new AuthenticationResponse containing the tokens if the operation is successful.
+        /// </returns>
         [HttpPost("generate-new-jwt-token")]
         public async Task<IActionResult> GenerateNewAccessToken(TokenModel tokenModel)
         {

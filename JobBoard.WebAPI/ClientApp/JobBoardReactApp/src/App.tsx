@@ -8,25 +8,47 @@ import DeleteJobListing from "./pages/DeleteJobListingPage";
 import LogoutPage from "./pages/LogoutPage";
 import LoginPage from "./pages/LogInPage";
 import SignUp from "./pages/SignUp";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route
-          path="/"
+          path="/add"
           element={
-            <div className="App">
-              <Home />
-            </div>
+            <ProtectedRoute>
+              <AddJobListing />
+            </ProtectedRoute>
           }
         />
-        <Route path="/add" element={<AddJobListing />} />
-        <Route path="/edit/:jobID" element={<EditJobListing />} />
-        <Route path="/delete/:jobID" element={<DeleteJobListing />} />
+        <Route
+          path="/edit/:jobID"
+          element={
+            <ProtectedRoute>
+              <EditJobListing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/delete/:jobID"
+          element={
+            <ProtectedRoute>
+              <DeleteJobListing />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
+        <Route
+          path="/logout"
+          element={
+            <ProtectedRoute>
+              <LogoutPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

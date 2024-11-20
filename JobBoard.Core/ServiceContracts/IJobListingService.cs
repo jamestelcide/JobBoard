@@ -28,6 +28,14 @@ namespace JobBoard.Core.ServiceContracts
         Task<JobListingResponseDto?> GetJobListingByIDAsync(Guid? jobID);
 
         /// <summary>
+        /// Returns a list of JobListing based on keywords for JobTitle and CityAndState
+        /// </summary>
+        /// <param name="name">JobTitle to search</param>
+        /// <param name="location">CityAndState to search</param>
+        /// <returns>A specific JobListing list and its data</returns>
+        Task<List<JobListingResponseDto?>> GetJobListingByNameAndLocationAsync(string? name, string? location);
+
+        /// <summary>
         /// Returns all JobListings with the same CityAndState Value
         /// </summary>
         /// <param name="cityAndState">CityAndState to search</param>

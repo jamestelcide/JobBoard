@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
-import { JobTypeOptions } from "../types/JobTypeOptions"; // import JobTypeOptions from the correct path
+import { JobTypeOptions } from "../types/JobTypeOptions";
+import { useAuth } from "../utils/AuthContext"; // Import the AuthContext
 import "../css/JobListingForm.css";
 
 const EditJobListingForm: React.FC = () => {
@@ -20,12 +21,19 @@ const EditJobListingForm: React.FC = () => {
 
   const navigate = useNavigate();
   const { jobID } = useParams<{ jobID: string }>();
+  const { getToken } = useAuth(); // Access the token
 
   useEffect(() => {
     const fetchJobDetails = async () => {
+      const token = getToken(); // Retrieve the token
       try {
         const response = await axios.get(
-          `https://localhost:7181/api/joblisting/id/${jobID}`
+          `https://localhost:7181/api/joblisting/id/${jobID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the request
+            },
+          }
         );
         setJob({
           ...response.data,
@@ -36,12 +44,10 @@ const EditJobListingForm: React.FC = () => {
       }
     };
     fetchJobDetails();
-  }, [jobID]);
+  }, [jobID, getToken]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setJob((prevJob) => ({
@@ -50,20 +56,26 @@ const EditJobListingForm: React.FC = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Only convert jobType if it was changed (in case the user doesn't select a new one)
     const updatedJob = {
       ...job,
-      jobType: parseInt(job.jobType.toString(), 10),
+      jobType: job.jobType === JobTypeOptions.FullTime ? job.jobType : parseInt(job.jobType.toString(), 10),
       jobPostedDate: job.jobPostedDate.toISOString(),
     };
 
+    const token = getToken(); // Retrieve the token
     try {
       const response = await axios.put(
         `https://localhost:7181/api/joblisting/${jobID}`,
-        updatedJob
+        updatedJob,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request
+          },
+        }
       );
       console.log("Job updated:", response.data);
       navigate("/");

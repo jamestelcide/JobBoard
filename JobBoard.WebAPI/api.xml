@@ -90,9 +90,18 @@
             </summary>
             <param name="jobID">The unique identifier of the JobListing.</param>
             <returns>
-            Returns a 200 OK response with the job listing if found, 
-            or a 404 Not Found response if no job listing exists with the provided JobID.
+            Returns a 200 OK response with the JobListing if found, 
+            or a 404 Not Found response if no JobListing exists with the provided JobID.
             </returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListingByNameAndLocation(System.String,System.String)">
+            <summary>
+            Retrieves a JobListing by its JobTitle and CityAndState.
+            </summary>
+            <param name="name">JobTitle value</param>
+            <param name="location">CityAndState value</param>
+            <returns>Returns a 200 OK response with the JobListing if found, 
+            or a 404 Not Found response if no JobListing exists with the provided JobID.</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PutJobListing(System.Guid,JobBoard.Core.Dto.JobListingUpdateRequestDto)">
             <summary>

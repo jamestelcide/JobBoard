@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
 import { JobTypeOptions } from "../types/JobTypeOptions";
 import "../css/JobListingForm.css";
+import { useAuth } from "../utils/AuthContext";
 
 const AddJobListingForm: React.FC = () => {
   const [job, setJob] = useState<JobItemProps>({
@@ -18,6 +19,7 @@ const AddJobListingForm: React.FC = () => {
     fullDescription: "",
   });
 
+  const { getToken } = useAuth(); // Access the token
   const navigate = useNavigate();
 
   const handleInputChange = (
@@ -34,6 +36,7 @@ const AddJobListingForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const token = getToken(); // Retrieve the token
     try {
       const updatedJob = {
         ...job,
@@ -41,10 +44,17 @@ const AddJobListingForm: React.FC = () => {
         jobPostedDate: job.jobPostedDate.toISOString(),
       };
       console.log("Sending job data:", updatedJob);
+
       const response = await axios.post(
         "https://localhost:7181/api/joblisting",
-        updatedJob
+        updatedJob,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the headers
+          },
+        }
       );
+
       console.log("Job submitted:", response.data);
       setJob({
         jobID: "",

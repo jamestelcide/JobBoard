@@ -2,28 +2,19 @@ import React, { useState } from "react";
 import "../css/SearchBar.css";
 
 interface SearchBarProps {
-  onSearch: (name: string, location: string) => void;
+  onSearch: (location: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [jobTitle, setJobTitle] = useState<string>("");
+const LocationSearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [location, setLocation] = useState<string>("");
 
   const handleSearch = () => {
-    onSearch(jobTitle, location);
+    onSearch(location);
   };
 
   return (
     <div className="container">
       <div className="search-bar">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Job Title"
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
-        />
-        <span className="location-divider">|</span>
         <input
           type="text"
           className="location-input"
@@ -42,4 +33,4 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   );
 };
 
-export default SearchBar;
+export default LocationSearchBar;

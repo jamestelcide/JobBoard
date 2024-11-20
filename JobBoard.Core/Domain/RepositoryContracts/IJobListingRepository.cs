@@ -35,6 +35,14 @@ namespace JobBoard.Core.Domain.RepositoryContracts
         Task<JobListing?> GetJobListingByJobID(Guid jobID);
 
         /// <summary>
+        /// Returns a list of JobListing based on keywords for JobTitle and CityAndState
+        /// </summary>
+        /// <param name="name">JobTitle to search</param>
+        /// <param name="location">CityAndState to search</param>
+        /// <returns>A specific JobListing list and its data</returns>
+        Task<List<JobListing>> GetJobListingByNameAndLocationAsync(string? name, string? location);
+
+        /// <summary>
         /// Updates a JobListing object based on the given JobID
         /// </summary>
         /// <param name="jobListing">JobListing object to update</param>

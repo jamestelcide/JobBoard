@@ -47,7 +47,7 @@ namespace JobBoard.Infrastructure.Repositories
             _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);
 
             List<JobListing> jobListings = await _db.JobListings
-                .Where(j => j.CityAndState == cityAndState)
+                .Where(j => j.CityAndState.StartsWith(cityAndState))
                 .ToListAsync();
 
             _logger.LogInformation("Retrieved {Count} job listings for city and state: {CityAndState}", jobListings.Count, cityAndState);
@@ -70,6 +70,28 @@ namespace JobBoard.Infrastructure.Repositories
             }
 
             return jobListing;
+        }
+
+        public async Task<List<JobListing>> GetJobListingByNameAndLocationAsync(string? name, string? location)
+        {
+            _logger.LogInformation("Retrieving job listings with filters - JobTitle: {JobTitle}, CityAndState: {CityAndState}", name, location);
+
+            IQueryable<JobListing> query = _db.JobListings;
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(j => j.JobTitle.Contains(name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                query = query.Where(j => j.CityAndState.Contains(location));
+            }
+
+            List<JobListing> jobListings = await query.ToListAsync();
+
+            _logger.LogInformation("Retrieved {Count} job listings with filters - JobTitle: {JobTitle}, CityAndState: {CityAndState}", name, location);
+            return jobListings;
         }
 
         public async Task<JobListing> UpdateJobListingAsync(JobListing jobListing)

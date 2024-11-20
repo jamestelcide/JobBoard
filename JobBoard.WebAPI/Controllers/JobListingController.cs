@@ -80,8 +80,8 @@ namespace JobBoard.WebAPI.Controllers
         /// </summary>
         /// <param name="jobID">The unique identifier of the JobListing.</param>
         /// <returns>
-        /// Returns a 200 OK response with the job listing if found, 
-        /// or a 404 Not Found response if no job listing exists with the provided JobID.
+        /// Returns a 200 OK response with the JobListing if found, 
+        /// or a 404 Not Found response if no JobListing exists with the provided JobID.
         /// </returns>
         [HttpGet("id/{jobID}")]
         public async Task<IActionResult> GetJobListingByID(Guid jobID)
@@ -89,9 +89,29 @@ namespace JobBoard.WebAPI.Controllers
             var jobListing = await _jobListingService.GetJobListingByIDAsync(jobID);
             if (jobListing == null)
             {
-                return NotFound($"No job listing found with JobID: {jobID}");
+                return NotFound($"No JobListing found with JobID: {jobID}");
             }
             return Ok(jobListing);
+        }
+
+        /// <summary>
+        /// Retrieves a JobListing by its JobTitle and CityAndState.
+        /// </summary>
+        /// <param name="name">JobTitle value</param>
+        /// <param name="location">CityAndState value</param>
+        /// <returns>Returns a 200 OK response with the JobListing if found, 
+        /// or a 404 Not Found response if no JobListing exists with the provided JobID.</returns>
+        [HttpGet("name-and-location")]
+        public async Task<ActionResult<IEnumerable<JobListingResponseDto>>> GetJobListingByNameAndLocation(string? name, string? location)
+        {
+            var jobListings = await _jobListingService.GetJobListingByNameAndLocationAsync(name, location);
+            
+            if (jobListings.Count == 0)
+            {
+                return NotFound("No match found");
+            }
+
+            return Ok();
         }
 
         /// <summary>
@@ -120,7 +140,7 @@ namespace JobBoard.WebAPI.Controllers
             catch (ArgumentException ex)
             {
                 _logger.LogWarning("Job listing with JobID: {JobID} not found for update", jobID);
-                return NotFound(ex.Message); // Ensure you return NotFound with the exception message
+                return NotFound(ex.Message);
             }
             catch (DbUpdateConcurrencyException)
             {

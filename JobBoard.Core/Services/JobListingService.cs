@@ -58,6 +58,13 @@ namespace JobBoard.Core.Services
             return jobListing.ToJobListingResponse();
         }
 
+        public async Task<List<JobListingResponseDto?>> GetJobListingByNameAndLocationAsync(string? name, string? location)
+        {
+            List<JobListing> jobListings = await _jobListingRepository.GetJobListingByNameAndLocationAsync(name, location);
+
+            return jobListings.Select(j => j.ToJobListingResponse()).ToList();
+        }
+
         public async Task<List<JobListingResponseDto>> GetJobListingsByCityAndState(string? cityAndState)
         {
             _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);

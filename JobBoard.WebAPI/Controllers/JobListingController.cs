@@ -1,20 +1,13 @@
 ﻿using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Core.Dto;
 using JobBoard.Core.ServiceContracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobBoard.WebAPI.Controllers
 {
     /// <summary>
-    /// Controller for handling Job Listing operations.
+    /// Controller for handling Job Listing operations
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -25,11 +18,11 @@ namespace JobBoard.WebAPI.Controllers
         private readonly ILogger<JobListingController> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the JobListingController class.
+        /// Initializes a new instance of the JobListingController class
         /// </summary>
-        /// <param name="jobListingService">Service for JobListing operations.</param>
-        /// /// <param name="jobListingRepository">Repository for JobListing operations.</param>
-        /// <param name="logger">Logger instance for logging information.</param>
+        /// <param name="jobListingService">Service for JobListing operations</param>
+        /// <param name="jobListingRepository">Repository for JobListing operations</param>
+        /// <param name="logger">Logger instance for logging information</param>
         public JobListingController(IJobListingService jobListingService, IJobListingRepository jobListingRepository, 
             ILogger<JobListingController> logger)
         {
@@ -39,9 +32,9 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Retrieves all JobListings.
+        /// Retrieves all JobListings
         /// </summary>
-        /// <returns>List of JobListings.</returns>
+        /// <returns>List of JobListings</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JobListingResponseDto>>> GetJobListings()
         {
@@ -54,10 +47,10 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Retrieves JobListings based on the specified city and state.
+        /// Retrieves JobListings based on the specified city and state
         /// </summary>
-        /// <param name="cityAndState">The city and state to filter JobListings by.</param>
-        /// <returns>List of JobListings matching the city and state.</returns>
+        /// <param name="cityAndState">The city and state to filter JobListings by</param>
+        /// <returns>List of JobListings matching the city and state</returns>
         [HttpGet("citystate/{cityAndState}")]
         public async Task<ActionResult<IEnumerable<JobListingResponseDto>>> GetJobListingsByCityAndState(string cityAndState)
         {
@@ -76,12 +69,12 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Retrieves a JobListing by its unique identifier (JobID).
+        /// Retrieves a JobListing by its unique identifier (JobID)
         /// </summary>
-        /// <param name="jobID">The unique identifier of the JobListing.</param>
+        /// <param name="jobID">The unique identifier of the JobListing</param>
         /// <returns>
-        /// Returns a 200 OK response with the job listing if found, 
-        /// or a 404 Not Found response if no job listing exists with the provided JobID.
+        /// Returns a 200 OK response with the JobListing if found, 
+        /// or a 404 Not Found response if no JobListing exists with the provided JobID
         /// </returns>
         [HttpGet("id/{jobID}")]
         public async Task<IActionResult> GetJobListingByID(Guid jobID)
@@ -89,17 +82,17 @@ namespace JobBoard.WebAPI.Controllers
             var jobListing = await _jobListingService.GetJobListingByIDAsync(jobID);
             if (jobListing == null)
             {
-                return NotFound($"No job listing found with JobID: {jobID}");
+                return NotFound($"No JobListing found with JobID: {jobID}");
             }
             return Ok(jobListing);
         }
 
         /// <summary>
-        /// Updates an existing JobListing.
+        /// Updates an existing JobListing
         /// </summary>
-        /// <param name="jobID">The JobID of the JobListing to update.</param>
-        /// <param name="jobListingUpdateRequest">The updated JobListing details.</param>
-        /// <returns>Status of the update operation.</returns>
+        /// <param name="jobID">The JobID of the JobListing to update</param>
+        /// <param name="jobListingUpdateRequest">The updated JobListing details</param>
+        /// <returns>Status of the update operation</returns>
         [HttpPut("{jobID}")]
         public async Task<IActionResult> PutJobListing(Guid jobID, JobListingUpdateRequestDto jobListingUpdateRequest)
         {
@@ -120,7 +113,7 @@ namespace JobBoard.WebAPI.Controllers
             catch (ArgumentException ex)
             {
                 _logger.LogWarning("Job listing with JobID: {JobID} not found for update", jobID);
-                return NotFound(ex.Message); // Ensure you return NotFound with the exception message
+                return NotFound(ex.Message);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -136,10 +129,10 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Adds a new JobListing.
+        /// Adds a new JobListing
         /// </summary>
-        /// <param name="jobListingAddRequest">The JobListing details to add.</param>
-        /// <returns>The created JobListing.</returns>
+        /// <param name="jobListingAddRequest">The JobListing details to add</param>
+        /// <returns>The created JobListing</returns>
         [HttpPost]
         public async Task<ActionResult<JobListingResponseDto>> PostJobListing(JobListingAddRequestDto jobListingAddRequest)
         {
@@ -164,10 +157,10 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a JobListing by JobID.
+        /// Deletes a JobListing by JobID
         /// </summary>
-        /// <param name="jobID">The JobID of the JobListing to delete.</param>
-        /// <returns>Status of the delete operation.</returns>
+        /// <param name="jobID">The JobID of the JobListing to delete</param>
+        /// <returns>Status of the delete operation</returns>
         [HttpDelete("{jobID}")]
         public async Task<IActionResult> DeleteJobListing(Guid jobID)
         {
@@ -187,6 +180,11 @@ namespace JobBoard.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks if a JobListing already exists
+        /// </summary>
+        /// <param name="jobID">JobID to search</param>
+        /// <returns>True or false</returns>
         private async Task<bool> JobListingExistsAsync(Guid jobID)
         {
             _logger.LogInformation("Checking if job listing exists with JobID: {JobID}", jobID);

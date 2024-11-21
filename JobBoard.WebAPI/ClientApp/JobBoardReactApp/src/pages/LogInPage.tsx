@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
     try {
       const response = await axios.post(
         "https://localhost:7181/api/account/login",
-        { Email: username, Password: password }, // Use 'Email' and 'Password' as expected by the backend
+        { Email: username, Password: password },
         {
           headers: {
             "Content-Type": "application/json",
@@ -27,8 +27,8 @@ const LoginPage: React.FC = () => {
 
       if (response.status === 200) {
         const data = response.data;
-        login(data.token); // Save token in context and localStorage
-        navigate("/"); // Redirect to homepage
+        login(data.token);
+        navigate("/");
       } else {
         alert("Invalid credentials");
       }

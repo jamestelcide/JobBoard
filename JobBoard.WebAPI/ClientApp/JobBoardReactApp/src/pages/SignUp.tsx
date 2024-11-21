@@ -15,7 +15,7 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Reset error before submitting
+    setError(null);
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -42,7 +42,7 @@ const SignUp: React.FC = () => {
 
       if (response.status === 200) {
         console.log("Registration successful:", response.data);
-        navigate("/login"); // Redirect to login page after successful signup
+        navigate("/login");
       } else {
         setError("An error occurred. Please try again.");
       }

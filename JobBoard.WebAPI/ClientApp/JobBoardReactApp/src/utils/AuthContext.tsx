@@ -14,12 +14,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (newToken: string) => {
     setToken(newToken);
-    localStorage.setItem('authToken', newToken); // Save token in localStorage
+    localStorage.setItem('authToken', newToken);
   };
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem('authToken'); // Remove token from localStorage
+    localStorage.removeItem('authToken');
   };
 
   const getToken = () => token;

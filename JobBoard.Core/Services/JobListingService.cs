@@ -3,7 +3,6 @@ using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Core.Dto;
 using JobBoard.Core.ServiceContracts;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace JobBoard.Core.Services
 {
@@ -20,7 +19,7 @@ namespace JobBoard.Core.Services
 
         public async Task<JobListingResponseDto> AddJobListingAsync(JobListingAddRequestDto? jobListingAddRequestDto)
         {
-            _logger.LogInformation("Adding a new job listing");
+            _logger.LogInformation("Adding a new JobListing");
 
             if (jobListingAddRequestDto == null)
             {
@@ -33,34 +32,38 @@ namespace JobBoard.Core.Services
 
             await _jobListingRepository.AddJobListingAsync(jobListing);
 
-            _logger.LogInformation("Job listing added successfully with JobID: {JobID}", jobListing.JobID);
+            _logger.LogInformation("JobListing added successfully with JobID: {JobID}", jobListing.JobID);
             return jobListing.ToJobListingResponse();
         }
 
         public async Task<List<JobListingResponseDto>> GetAllJobListingsAsync()
         {
-            _logger.LogInformation("Retrieving all job listings");
+            _logger.LogInformation("Retrieving all JobListing");
 
             List<JobListing> jobListings = await _jobListingRepository.GetAllJobListingsAsync();
-            _logger.LogInformation("Retrieved {Count} job listings", jobListings.Count);
+            _logger.LogInformation("Retrieved {Count} JobListing", jobListings.Count);
 
             return jobListings.Select(j => j.ToJobListingResponse()).ToList();
         }
 
         public async Task<JobListingResponseDto?> GetJobListingByIDAsync(Guid? jobID)
         {
+            _logger.LogInformation("Retrieving JobListing by ID");
+
             if (jobID == null) { return null; }
 
             JobListing? jobListing = await _jobListingRepository.GetJobListingByJobID(jobID.Value);
 
             if (jobListing == null) { return null; }
 
+            _logger.LogInformation("Retrieved JobListing");
+
             return jobListing.ToJobListingResponse();
         }
 
         public async Task<List<JobListingResponseDto>> GetJobListingsByCityAndState(string? cityAndState)
         {
-            _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);
+            _logger.LogInformation("Retrieving JobListings for city and state: {CityAndState}", cityAndState);
             
             if (cityAndState == null)
             {
@@ -68,27 +71,27 @@ namespace JobBoard.Core.Services
             }
 
             List<JobListing> jobListings = await _jobListingRepository.GetJobListingsByCityAndStateAsync(cityAndState);
-            _logger.LogInformation("Retrieved {Count} job listings for city and state: {CityAndState}", jobListings.Count, cityAndState);
+            _logger.LogInformation("Retrieved {Count} JobListings for city and state: {CityAndState}", jobListings.Count, cityAndState);
 
             return jobListings.Select(j => j.ToJobListingResponse()).ToList();
         }
 
         public async Task<JobListingResponseDto> UpdateJobListingAsync(JobListingUpdateRequestDto? jobListingUpdateRequest)
         {
-            _logger.LogInformation("Updating job listing with JobID: {JobID}", jobListingUpdateRequest?.JobID);
+            _logger.LogInformation("Updating JobListing with JobID: {JobID}", jobListingUpdateRequest?.JobID);
 
             if (jobListingUpdateRequest == null)
             {
                 _logger.LogWarning("UpdateJobListingAsync called with null jobListingUpdateRequest");
-                throw new ArgumentNullException(nameof(jobListingUpdateRequest), "Job listing update request cannot be null.");
+                throw new ArgumentNullException(nameof(jobListingUpdateRequest), "JobListing update request cannot be null.");
             }
 
             JobListing? matchingJobListing = await _jobListingRepository.GetJobListingByJobID(jobListingUpdateRequest.JobID);
 
             if (matchingJobListing == null)
             {
-                _logger.LogWarning("Job listing with JobID: {JobID} not found", jobListingUpdateRequest.JobID);
-                throw new ArgumentException($"Job listing with ID {jobListingUpdateRequest.JobID} not found.");
+                _logger.LogWarning("JobListing with JobID: {JobID} not found", jobListingUpdateRequest.JobID);
+                throw new ArgumentException($"JobListing with ID {jobListingUpdateRequest.JobID} not found.");
             }
 
             matchingJobListing.JobTitle = jobListingUpdateRequest.JobTitle;
@@ -102,23 +105,23 @@ namespace JobBoard.Core.Services
 
             await _jobListingRepository.UpdateJobListingAsync(matchingJobListing);
 
-            _logger.LogInformation("Job listing with JobID: {JobID} updated successfully", jobListingUpdateRequest.JobID);
+            _logger.LogInformation("JobListing with JobID: {JobID} updated successfully", jobListingUpdateRequest.JobID);
             return matchingJobListing.ToJobListingResponse();
         }
 
         public async Task<bool> DeleteJobListingAsync(Guid jobID)
         {
-            _logger.LogInformation("Deleting job listing with JobID: {JobID}", jobID);
+            _logger.LogInformation("Deleting JobListing with JobID: {JobID}", jobID);
 
             var jobListing = await _jobListingRepository.GetJobListingByJobID(jobID);
             if (jobListing == null)
             {
-                _logger.LogWarning("Job listing with JobID: {JobID} not found", jobID);
+                _logger.LogWarning("JobListing with JobID: {JobID} not found", jobID);
                 return false;
             }
 
             await _jobListingRepository.DeleteJobListingByIDAsync(jobID);
-            _logger.LogInformation("Job listing with JobID: {JobID} deleted successfully", jobID);
+            _logger.LogInformation("JobListing with JobID: {JobID} deleted successfully", jobID);
 
             return true;
         }

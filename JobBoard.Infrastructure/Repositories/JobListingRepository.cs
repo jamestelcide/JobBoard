@@ -3,10 +3,6 @@ using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobBoard.Infrastructure.Repositories
 {
@@ -47,7 +43,7 @@ namespace JobBoard.Infrastructure.Repositories
             _logger.LogInformation("Retrieving job listings for city and state: {CityAndState}", cityAndState);
 
             List<JobListing> jobListings = await _db.JobListings
-                .Where(j => j.CityAndState == cityAndState)
+                .Where(j => j.CityAndState.StartsWith(cityAndState))
                 .ToListAsync();
 
             _logger.LogInformation("Retrieved {Count} job listings for city and state: {CityAndState}", jobListings.Count, cityAndState);

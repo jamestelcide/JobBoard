@@ -7,15 +7,9 @@ namespace JobBoard.Infrastructure.DbContext
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        {
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
-        }
-
-        public ApplicationDbContext()
-        {
-
-        }
+        public ApplicationDbContext() { }
 
         public virtual DbSet<JobListing> JobListings { get; set; }
 

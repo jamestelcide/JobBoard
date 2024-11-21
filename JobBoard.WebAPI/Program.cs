@@ -20,6 +20,6 @@ app.MapControllers();
 app.Run();
 
 /// <summary>
-/// The entry point for the integration tests of the JobListingController.
+/// The entry point for the integration tests for the JobListingControllerIntegrationTest.
 /// </summary>
 public partial class Program { }

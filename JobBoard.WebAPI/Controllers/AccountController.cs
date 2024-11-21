@@ -4,16 +4,12 @@ using JobBoard.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace JobBoard.WebAPI.Controllers
 {
     /// <summary>
-    /// Controller responsible for managing user accounts, including registration, login, and logout functionalities.
+    /// Controller responsible for managing user accounts, including registration, login, and logout functionalities
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -29,11 +25,11 @@ namespace JobBoard.WebAPI.Controllers
         /// <summary>
         /// Initializes a new instance of the AccountController class.
         /// </summary>
-        /// <param name="userManager">Manages user-related operations.</param>
-        /// <param name="signInManager">Manages user sign-in operations.</param>
-        /// <param name="roleManager">Manages role-related operations.</param>
-        /// <param name="logger">Logger for logging events and errors.</param>
-        /// <param name="jwtService">The service responsible for handling JWT authentication operations.</param>
+        /// <param name="userManager">Manages user-related operations</param>
+        /// <param name="signInManager">Manages user sign-in operations</param>
+        /// <param name="roleManager">Manages role-related operations</param>
+        /// <param name="logger">Logger for logging events and errors</param>
+        /// <param name="jwtService">The service responsible for handling JWT authentication operations</param>
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<ApplicationRole> roleManager,
@@ -48,10 +44,10 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Registers a new user account.
+        /// Registers a new user account
         /// </summary>
-        /// <param name="registerDto">The registration details.</param>
-        /// <returns>A newly created user if successful; otherwise, an error message.</returns>
+        /// <param name="registerDto">The registration details</param>
+        /// <returns>A newly created user if successful; otherwise, an error message</returns>
         [HttpPost("register")]
         public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDto registerDto)
         {
@@ -94,10 +90,10 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Checks if an email address is already registered.
+        /// Checks if an email address is already registered
         /// </summary>
-        /// <param name="email">The email address to check.</param>
-        /// <returns>True if the email is not registered; false otherwise.</returns>
+        /// <param name="email">The email address to check</param>
+        /// <returns>True if the email is not registered; false otherwise</returns>
         [HttpGet]
         public async Task<IActionResult> IsEmailAlreadyRegistered(string email)
         {
@@ -118,10 +114,10 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Logs in an existing user.
+        /// Logs in an existing user
         /// </summary>
-        /// <param name="loginDto">The login details.</param>
-        /// <returns>Information about the logged-in user if successful; otherwise, an error message.</returns>
+        /// <param name="loginDto">The login details</param>
+        /// <returns>Information about the logged-in user if successful; otherwise, an error message</returns>
         [HttpPost("login")]
         public async Task<IActionResult> PostLogin(LoginDto loginDto)
         {
@@ -165,9 +161,9 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Logs out the currently authenticated user.
+        /// Logs out the currently authenticated user
         /// </summary>
-        /// <returns>No content if successful.</returns>
+        /// <returns>No content if successful</returns>
         [HttpGet("logout")]
         public async Task<IActionResult> GetLogout()
         {
@@ -180,14 +176,12 @@ namespace JobBoard.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Generates a new JWT access token and refresh token for a client request.
-        /// Validates the provided token and refresh token, and ensures the user exists and the refresh token is valid.
-        /// If successful, updates the user's refresh token and expiration date, and returns the new authentication details.
+        /// Generates a new JWT access token and refresh token for a client request
         /// </summary>
-        /// <param name="tokenModel">The model containing the current JWT token and refresh token.</param>
+        /// <param name="tokenModel">The model containing the current JWT token and refresh token</param>
         /// <returns>
-        /// Returns BadResult if the request is invalid, the token is invalid, or the refresh token is expired.
-        /// Returns OK with the new AuthenticationResponse containing the tokens if the operation is successful.
+        /// Returns BadResult if the request is invalid, the token is invalid, or the refresh token is expired
+        /// Returns OK with the new AuthenticationResponse containing the tokens if the operation is successful
         /// </returns>
         [HttpPost("generate-new-jwt-token")]
         public async Task<IActionResult> GenerateNewAccessToken(TokenModel tokenModel)

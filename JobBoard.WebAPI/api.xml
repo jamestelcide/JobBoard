@@ -6,136 +6,141 @@
     <members>
         <member name="T:JobBoard.WebAPI.Controllers.AccountController">
             <summary>
-            Controller responsible for managing user accounts, including registration, login, and logout functionalities.
+            Controller responsible for managing user accounts, including registration, login, and logout functionalities
             </summary>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.#ctor(Microsoft.AspNetCore.Identity.UserManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.SignInManager{JobBoard.Core.Domain.IdentityEntities.ApplicationUser},Microsoft.AspNetCore.Identity.RoleManager{JobBoard.Core.Domain.IdentityEntities.ApplicationRole},Microsoft.Extensions.Logging.ILogger{JobBoard.WebAPI.Controllers.AccountController},JobBoard.Core.ServiceContracts.IJwtService)">
             <summary>
             Initializes a new instance of the AccountController class.
             </summary>
-            <param name="userManager">Manages user-related operations.</param>
-            <param name="signInManager">Manages user sign-in operations.</param>
-            <param name="roleManager">Manages role-related operations.</param>
-            <param name="logger">Logger for logging events and errors.</param>
-            <param name="jwtService">The service responsible for handling JWT authentication operations.</param>
+            <param name="userManager">Manages user-related operations</param>
+            <param name="signInManager">Manages user sign-in operations</param>
+            <param name="roleManager">Manages role-related operations</param>
+            <param name="logger">Logger for logging events and errors</param>
+            <param name="jwtService">The service responsible for handling JWT authentication operations</param>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.PostRegister(JobBoard.Core.Dto.RegisterDto)">
             <summary>
-            Registers a new user account.
+            Registers a new user account
             </summary>
-            <param name="registerDto">The registration details.</param>
-            <returns>A newly created user if successful; otherwise, an error message.</returns>
+            <param name="registerDto">The registration details</param>
+            <returns>A newly created user if successful; otherwise, an error message</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.IsEmailAlreadyRegistered(System.String)">
             <summary>
-            Checks if an email address is already registered.
+            Checks if an email address is already registered
             </summary>
-            <param name="email">The email address to check.</param>
-            <returns>True if the email is not registered; false otherwise.</returns>
+            <param name="email">The email address to check</param>
+            <returns>True if the email is not registered; false otherwise</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.PostLogin(JobBoard.Core.Dto.LoginDto)">
             <summary>
-            Logs in an existing user.
+            Logs in an existing user
             </summary>
-            <param name="loginDto">The login details.</param>
-            <returns>Information about the logged-in user if successful; otherwise, an error message.</returns>
+            <param name="loginDto">The login details</param>
+            <returns>Information about the logged-in user if successful; otherwise, an error message</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.GetLogout">
             <summary>
-            Logs out the currently authenticated user.
+            Logs out the currently authenticated user
             </summary>
-            <returns>No content if successful.</returns>
+            <returns>No content if successful</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.AccountController.GenerateNewAccessToken(JobBoard.Core.Dto.TokenModel)">
             <summary>
-            Generates a new JWT access token and refresh token for a client request.
-            Validates the provided token and refresh token, and ensures the user exists and the refresh token is valid.
-            If successful, updates the user's refresh token and expiration date, and returns the new authentication details.
+            Generates a new JWT access token and refresh token for a client request
             </summary>
-            <param name="tokenModel">The model containing the current JWT token and refresh token.</param>
+            <param name="tokenModel">The model containing the current JWT token and refresh token</param>
             <returns>
-            Returns BadResult if the request is invalid, the token is invalid, or the refresh token is expired.
-            Returns OK with the new AuthenticationResponse containing the tokens if the operation is successful.
+            Returns BadResult if the request is invalid, the token is invalid, or the refresh token is expired
+            Returns OK with the new AuthenticationResponse containing the tokens if the operation is successful
             </returns>
         </member>
         <member name="T:JobBoard.WebAPI.Controllers.JobListingController">
             <summary>
-            Controller for handling Job Listing operations.
+            Controller for handling Job Listing operations
             </summary>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.#ctor(JobBoard.Core.ServiceContracts.IJobListingService,JobBoard.Core.Domain.RepositoryContracts.IJobListingRepository,Microsoft.Extensions.Logging.ILogger{JobBoard.WebAPI.Controllers.JobListingController})">
             <summary>
-            Initializes a new instance of the JobListingController class.
+            Initializes a new instance of the JobListingController class
             </summary>
-            <param name="jobListingService">Service for JobListing operations.</param>
-            /// <param name="jobListingRepository">Repository for JobListing operations.</param>
-            <param name="logger">Logger instance for logging information.</param>
+            <param name="jobListingService">Service for JobListing operations</param>
+            <param name="jobListingRepository">Repository for JobListing operations</param>
+            <param name="logger">Logger instance for logging information</param>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListings">
             <summary>
-            Retrieves all JobListings.
+            Retrieves all JobListings
             </summary>
-            <returns>List of JobListings.</returns>
+            <returns>List of JobListings</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListingsByCityAndState(System.String)">
             <summary>
-            Retrieves JobListings based on the specified city and state.
+            Retrieves JobListings based on the specified city and state
             </summary>
-            <param name="cityAndState">The city and state to filter JobListings by.</param>
-            <returns>List of JobListings matching the city and state.</returns>
+            <param name="cityAndState">The city and state to filter JobListings by</param>
+            <returns>List of JobListings matching the city and state</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.GetJobListingByID(System.Guid)">
             <summary>
-            Retrieves a JobListing by its unique identifier (JobID).
+            Retrieves a JobListing by its unique identifier (JobID)
             </summary>
-            <param name="jobID">The unique identifier of the JobListing.</param>
+            <param name="jobID">The unique identifier of the JobListing</param>
             <returns>
-            Returns a 200 OK response with the job listing if found, 
-            or a 404 Not Found response if no job listing exists with the provided JobID.
+            Returns a 200 OK response with the JobListing if found, 
+            or a 404 Not Found response if no JobListing exists with the provided JobID
             </returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PutJobListing(System.Guid,JobBoard.Core.Dto.JobListingUpdateRequestDto)">
             <summary>
-            Updates an existing JobListing.
+            Updates an existing JobListing
             </summary>
-            <param name="jobID">The JobID of the JobListing to update.</param>
-            <param name="jobListingUpdateRequest">The updated JobListing details.</param>
-            <returns>Status of the update operation.</returns>
+            <param name="jobID">The JobID of the JobListing to update</param>
+            <param name="jobListingUpdateRequest">The updated JobListing details</param>
+            <returns>Status of the update operation</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.PostJobListing(JobBoard.Core.Dto.JobListingAddRequestDto)">
             <summary>
-            Adds a new JobListing.
+            Adds a new JobListing
             </summary>
-            <param name="jobListingAddRequest">The JobListing details to add.</param>
-            <returns>The created JobListing.</returns>
+            <param name="jobListingAddRequest">The JobListing details to add</param>
+            <returns>The created JobListing</returns>
         </member>
         <member name="M:JobBoard.WebAPI.Controllers.JobListingController.DeleteJobListing(System.Guid)">
             <summary>
-            Deletes a JobListing by JobID.
+            Deletes a JobListing by JobID
             </summary>
-            <param name="jobID">The JobID of the JobListing to delete.</param>
-            <returns>Status of the delete operation.</returns>
+            <param name="jobID">The JobID of the JobListing to delete</param>
+            <returns>Status of the delete operation</returns>
+        </member>
+        <member name="M:JobBoard.WebAPI.Controllers.JobListingController.JobListingExistsAsync(System.Guid)">
+            <summary>
+            Checks if a JobListing already exists
+            </summary>
+            <param name="jobID">JobID to search</param>
+            <returns>True or false</returns>
         </member>
         <member name="T:JobBoard.WebAPI.StartupExtensions.ConfigureServicesExtension">
             <summary>
             Extension methods for configuring services in the IServiceCollection
             This class contains methods to register various services, middleware, and configurations 
             needed for the application, including database context, repositories, identity services, 
-            Swagger, CORS, and authentication settings.
+            Swagger, CORS, and authentication settings
             </summary>
         </member>
         <member name="M:JobBoard.WebAPI.StartupExtensions.ConfigureServicesExtension.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Hosting.IHostEnvironment)">
             <summary>
-            Configures services for the application by setting up necessary dependencies and configurations.
+            Configures services for the application by setting up necessary dependencies and configurations
             </summary>
-            <param name="services">The IServiceCollection used to register application services.</param>
-            <param name="configuration">The IConfiguration containing application configuration settings, such as connection strings and allowed origins.</param>
-            <param name="env">The IHostEnvironment used to check the environment (Development, Test, etc.).</param>
-            <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> with configured services for dependency injection.</returns>
+            <param name="services">The IServiceCollection used to register application services</param>
+            <param name="configuration">The IConfiguration containing application configuration settings, such as connection strings and allowed origins</param>
+            <param name="env">The IHostEnvironment used to check the environment (Development, Test, etc.)</param>
+            <returns>The IServiceCollection with configured services for dependency injection</returns>
         </member>
         <member name="T:Program">
             <summary>
-            The entry point for the integration tests of the JobListingController.
+            The entry point for the integration tests for the JobListingControllerIntegrationTest.
             </summary>
         </member>
     </members>

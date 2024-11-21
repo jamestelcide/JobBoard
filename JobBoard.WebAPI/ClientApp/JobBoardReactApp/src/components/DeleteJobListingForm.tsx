@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
 import { JobTypeOptions } from "../types/JobTypeOptions";
-import { useAuth } from "../utils/AuthContext"; // Import the AuthContext
+import { useAuth } from "../utils/AuthContext";
 import "../css/JobListingForm.css";
 
 const DeleteJobListingForm: React.FC = () => {
@@ -21,17 +21,17 @@ const DeleteJobListingForm: React.FC = () => {
 
   const navigate = useNavigate();
   const { jobID } = useParams<{ jobID: string }>();
-  const { getToken } = useAuth(); // Access the token
+  const { getToken } = useAuth();
 
   useEffect(() => {
     const fetchJobDetails = async () => {
-      const token = getToken(); // Retrieve the token
+      const token = getToken();
       try {
         const response = await axios.get(
           `https://localhost:7181/api/joblisting/id/${jobID}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the request
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -45,18 +45,17 @@ const DeleteJobListingForm: React.FC = () => {
     };
     fetchJobDetails();
   }, [jobID, getToken]);
-
-  // Handle the delete action
+  
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this job listing?"
     );
     if (confirmDelete) {
-      const token = getToken(); // Retrieve the token
+      const token = getToken();
       try {
         await axios.delete(`https://localhost:7181/api/joblisting/${jobID}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`,
           },
         });
         console.log("Job deleted:", jobID);
@@ -144,7 +143,7 @@ const DeleteJobListingForm: React.FC = () => {
           <input
             type="date"
             name="jobPostedDate"
-            value={job.jobPostedDate.toISOString().split("T")[0]} // yyyy-MM-dd format
+            value={job.jobPostedDate.toISOString().split("T")[0]} //Formats the date as yyyy-MM-dd
             readOnly
             className="form-input"
           />

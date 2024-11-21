@@ -12,11 +12,11 @@ namespace JobBoard.Core.Dto
         [Required(ErrorMessage = "Job title can not be blank!")]
         public string JobTitle { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Company Name can not be blank!")]
+        [Required(ErrorMessage = "Company name can not be blank!")]
         public string CompanyName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Email can NOT be blank")]
-        [EmailAddress(ErrorMessage = "Please use valid email")]
+        [Required(ErrorMessage = "Email can not be blank")]
+        [EmailAddress(ErrorMessage = "Email should be in a proper email address format!")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = string.Empty;
 

@@ -35,14 +35,6 @@ namespace JobBoard.Core.Domain.RepositoryContracts
         Task<JobListing?> GetJobListingByJobID(Guid jobID);
 
         /// <summary>
-        /// Returns a list of JobListing based on keywords for JobTitle and CityAndState
-        /// </summary>
-        /// <param name="name">JobTitle to search</param>
-        /// <param name="location">CityAndState to search</param>
-        /// <returns>A specific JobListing list and its data</returns>
-        Task<List<JobListing>> GetJobListingByNameAndLocationAsync(string? name, string? location);
-
-        /// <summary>
         /// Updates a JobListing object based on the given JobID
         /// </summary>
         /// <param name="jobListing">JobListing object to update</param>
@@ -57,7 +49,7 @@ namespace JobBoard.Core.Domain.RepositoryContracts
         Task<bool> DeleteJobListingByIDAsync(Guid jobID);
 
         /// <summary>
-        /// Checks whether a job listing exists in the database for the given JobID.
+        /// Checks whether a JobListing exists in the database for the given JobID.
         /// </summary>
         /// <param name="jobID">The unique identifier of the JobListing to check.</param>
         /// <returns>Task result containing a boolean indicating whether the JobListing exists (true) or not (false).</returns>

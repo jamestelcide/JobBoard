@@ -32,7 +32,6 @@ namespace JobBoard.IntegrationTests
                 FullDescription = "Looking for a software engineer experienced in C# and .NET."
             };
 
-            
             var postResponse = await _httpClient.PostAsJsonAsync("/api/JobListing", newJobListing);
             postResponse.EnsureSuccessStatusCode();
 
@@ -56,7 +55,7 @@ namespace JobBoard.IntegrationTests
         public async Task GetJobListingsByCityAndState_ShouldReturnNotFound_WhenCityAndStateDoesNotMatch()
         {
             // Act
-            var response = await _httpClient.GetAsync("/api/JobListing/NonExistentCity");
+            var response = await _httpClient.GetAsync("/api/JobListing/citystate/NonExistentCity");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -128,7 +127,7 @@ namespace JobBoard.IntegrationTests
 
             var createdJobListing = await postResponse.Content.ReadFromJsonAsync<JobListingResponseDto>();
             
-            Assert.NotNull(createdJobListing);  //Ensures the createdJobListing is not null before proceeding
+            Assert.NotNull(createdJobListing);
 
             var jobID = createdJobListing.JobID;
 
@@ -189,7 +188,7 @@ namespace JobBoard.IntegrationTests
             var jobID = Guid.NewGuid();
             var updateRequest = new JobListingUpdateRequestDto
             {
-                JobID = Guid.NewGuid(), // Mismatching JobID
+                JobID = Guid.NewGuid(), //Mismatching JobID
                 JobTitle = "Title",
                 CompanyName = "Company",
                 CityAndState = "City, State",

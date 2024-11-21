@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { JobItemProps } from "../types/JobItemProps";
 import { JobTypeOptions } from "../types/JobTypeOptions";
-import { useAuth } from "../utils/AuthContext"; // Import the AuthContext
+import { useAuth } from "../utils/AuthContext";
 import "../css/JobListingForm.css";
 
 const EditJobListingForm: React.FC = () => {
@@ -21,17 +21,17 @@ const EditJobListingForm: React.FC = () => {
 
   const navigate = useNavigate();
   const { jobID } = useParams<{ jobID: string }>();
-  const { getToken } = useAuth(); // Access the token
+  const { getToken } = useAuth();
 
   useEffect(() => {
     const fetchJobDetails = async () => {
-      const token = getToken(); // Retrieve the token
+      const token = getToken();
       try {
         const response = await axios.get(
           `https://localhost:7181/api/joblisting/id/${jobID}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the request
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -58,22 +58,21 @@ const EditJobListingForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Only convert jobType if it was changed (in case the user doesn't select a new one)
+    
     const updatedJob = {
       ...job,
       jobType: job.jobType === JobTypeOptions.FullTime ? job.jobType : parseInt(job.jobType.toString(), 10),
       jobPostedDate: job.jobPostedDate.toISOString(),
     };
 
-    const token = getToken(); // Retrieve the token
+    const token = getToken();
     try {
       const response = await axios.put(
         `https://localhost:7181/api/joblisting/${jobID}`,
         updatedJob,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -169,7 +168,7 @@ const EditJobListingForm: React.FC = () => {
           <input
             type="date"
             name="jobPostedDate"
-            value={job.jobPostedDate.toISOString().split("T")[0]} //yyyy-MM-dd format
+            value={job.jobPostedDate.toISOString().split("T")[0]} //Formats the date as yyyy-MM-dd
             readOnly
             className="form-input"
             required

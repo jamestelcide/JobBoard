@@ -7,8 +7,8 @@ const LogoutPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    logout(); // Clear the token and auth state
-    navigate("/login"); // Redirect to login page
+    logout();
+    navigate("/login");
   }, [logout, navigate]);
 
   return <p>Logging out...</p>;

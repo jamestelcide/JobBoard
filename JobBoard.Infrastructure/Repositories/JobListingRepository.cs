@@ -3,10 +3,6 @@ using JobBoard.Core.Domain.RepositoryContracts;
 using JobBoard.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobBoard.Infrastructure.Repositories
 {
@@ -70,28 +66,6 @@ namespace JobBoard.Infrastructure.Repositories
             }
 
             return jobListing;
-        }
-
-        public async Task<List<JobListing>> GetJobListingByNameAndLocationAsync(string? name, string? location)
-        {
-            _logger.LogInformation("Retrieving job listings with filters - JobTitle: {JobTitle}, CityAndState: {CityAndState}", name, location);
-
-            IQueryable<JobListing> query = _db.JobListings;
-
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                query = query.Where(j => j.JobTitle.Contains(name));
-            }
-
-            if (!string.IsNullOrWhiteSpace(location))
-            {
-                query = query.Where(j => j.CityAndState.Contains(location));
-            }
-
-            List<JobListing> jobListings = await query.ToListAsync();
-
-            _logger.LogInformation("Retrieved {Count} job listings with filters - JobTitle: {JobTitle}, CityAndState: {CityAndState}", name, location);
-            return jobListings;
         }
 
         public async Task<JobListing> UpdateJobListingAsync(JobListing jobListing)

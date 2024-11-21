@@ -19,17 +19,17 @@ namespace JobBoard.WebAPI.StartupExtensions
     /// Extension methods for configuring services in the IServiceCollection
     /// This class contains methods to register various services, middleware, and configurations 
     /// needed for the application, including database context, repositories, identity services, 
-    /// Swagger, CORS, and authentication settings.
+    /// Swagger, CORS, and authentication settings
     /// </summary>
     public static class ConfigureServicesExtension
     {
         /// <summary>
-        /// Configures services for the application by setting up necessary dependencies and configurations.
+        /// Configures services for the application by setting up necessary dependencies and configurations
         /// </summary>
-        /// <param name="services">The IServiceCollection used to register application services.</param>
-        /// <param name="configuration">The IConfiguration containing application configuration settings, such as connection strings and allowed origins.</param>
-        /// <param name="env">The IHostEnvironment used to check the environment (Development, Test, etc.).</param>
-        /// <returns>The <see cref="IServiceCollection"/> with configured services for dependency injection.</returns>
+        /// <param name="services">The IServiceCollection used to register application services</param>
+        /// <param name="configuration">The IConfiguration containing application configuration settings, such as connection strings and allowed origins</param>
+        /// <param name="env">The IHostEnvironment used to check the environment (Development, Test, etc.)</param>
+        /// <returns>The IServiceCollection with configured services for dependency injection</returns>
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -52,7 +52,7 @@ namespace JobBoard.WebAPI.StartupExtensions
             })
             .AddXmlSerializerFormatters();
 
-            services.AddEndpointsApiExplorer(); // Generates description for all endpoints
+            services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
             {
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
@@ -71,7 +71,7 @@ namespace JobBoard.WebAPI.StartupExtensions
                     else
                     {
                         // Fallback if no allowed origins are provided
-                        policyBuilder.WithOrigins("*"); // Allow all origins, or set to a default value
+                        policyBuilder.WithOrigins("*");
                     }
 
                     policyBuilder

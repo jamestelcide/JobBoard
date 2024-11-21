@@ -172,13 +172,12 @@ namespace JobBoard.ServiceTests
             var jobListings = _fixture.Build<JobListing>()
                 .With(j => j.CityAndState, "Atlanta, GA")
                 .CreateMany(3)
-                .ToList();  // Creates multiple job listings with the same city and state
+                .ToList();
 
             List<JobListingResponseDto> jobListingResponsesExpected = jobListings
                 .Select(j => j.ToJobListingResponse())
-                .ToList();  // Converts job listings to response DTOs
+                .ToList();
 
-            // Set up repository mock to return the list
             _jobListingRepositoryMock.Setup(j => j.GetJobListingsByCityAndStateAsync(It.IsAny<string>()))
                 .ReturnsAsync(jobListings);
 
@@ -189,7 +188,6 @@ namespace JobBoard.ServiceTests
             // Assert
             jobListingResponsesFromGet.Should().BeEquivalentTo(jobListingResponsesExpected);
         }
-
         #endregion
 
         #region UpdateJobListingAsync
@@ -255,6 +253,5 @@ namespace JobBoard.ServiceTests
             isDeleted.Should().BeTrue();
         }
         #endregion
-
     }
 }

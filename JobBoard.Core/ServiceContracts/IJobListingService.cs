@@ -28,31 +28,23 @@ namespace JobBoard.Core.ServiceContracts
         Task<JobListingResponseDto?> GetJobListingByIDAsync(Guid? jobID);
 
         /// <summary>
-        /// Returns a list of JobListing based on keywords for JobTitle and CityAndState
-        /// </summary>
-        /// <param name="name">JobTitle to search</param>
-        /// <param name="location">CityAndState to search</param>
-        /// <returns>A specific JobListing list and its data</returns>
-        Task<List<JobListingResponseDto?>> GetJobListingByNameAndLocationAsync(string? name, string? location);
-
-        /// <summary>
-        /// Returns all JobListings with the same CityAndState Value
+        /// Returns all JobListings with the same CityAndState value
         /// </summary>
         /// <param name="cityAndState">CityAndState to search</param>
-        /// <returns>A list all JobListings with the same CityAndState Value</returns>
+        /// <returns>A list all JobListings with the same CityAndState value</returns>
         Task<List<JobListingResponseDto>> GetJobListingsByCityAndState(string? cityAndState);
 
         /// <summary>
         /// Updates the specified JobListing details based on the given JobID
         /// </summary>
-        /// <param name="JobListingUpdateRequest">JobListing details to update, including JobID</param>
+        /// <param name="jobListingUpdateRequest">JobListing details to update, including JobID</param>
         /// <returns>Returns the JobListingResponse object after updating</returns>
         Task<JobListingResponseDto> UpdateJobListingAsync(JobListingUpdateRequestDto? jobListingUpdateRequest);
 
         /// <summary>
         /// Deletes a JobListing based on the given JobID
         /// </summary>
-        /// <param name="JobID"></param>
+        /// <param name="jobID">JobID associated to JobListing</param>
         /// <returns>Returns true if delete was successful; otherwise returns false</returns>
         Task<bool> DeleteJobListingAsync(Guid jobID);
     }

@@ -11,17 +11,16 @@ const Navbar: React.FC = () => {
     const token = getToken();
     if (token) {
       try {
-        // Decode JWT token to extract email
-        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decoding the payload part of the JWT
-        console.log("Decoded Token:", decodedToken); // Debug: log the decoded token
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
+        console.log("Decoded Token:", decodedToken);
         setUserEmail(
           decodedToken?.[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
           ] || "Unknown User"
-        ); // Access the email from the correct key
+        );
       } catch (error) {
         console.error("Error decoding token:", error);
-        setUserEmail("Unknown User"); // Fallback in case decoding fails
+        setUserEmail("Unknown User");
       }
     }
   }, [getToken]);
@@ -38,12 +37,11 @@ const Navbar: React.FC = () => {
       <div className="nav-right">
         {isLoggedIn ? (
           <>
-            <span>{userEmail}</span> {/* Display the logged-in user's email */}
+            <span>{userEmail}</span> 
             <span className="separator">|</span>
             <Link to="#" onClick={logout}>
               Logout
             </Link>{" "}
-            {/* Logout button */}
           </>
         ) : (
           <>

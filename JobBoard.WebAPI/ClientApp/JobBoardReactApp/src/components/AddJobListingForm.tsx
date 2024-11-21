@@ -19,7 +19,7 @@ const AddJobListingForm: React.FC = () => {
     fullDescription: "",
   });
 
-  const { getToken } = useAuth(); // Access the token
+  const { getToken } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (
@@ -36,7 +36,7 @@ const AddJobListingForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = getToken(); // Retrieve the token
+    const token = getToken();
     try {
       const updatedJob = {
         ...job,
@@ -50,7 +50,7 @@ const AddJobListingForm: React.FC = () => {
         updatedJob,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Add the token to the headers
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -158,7 +158,7 @@ const AddJobListingForm: React.FC = () => {
           <input
             type="date"
             name="jobPostedDate"
-            value={job.jobPostedDate.toISOString().substring(0, 10)} // Format the date as yyyy-MM-dd
+            value={job.jobPostedDate.toISOString().substring(0, 10)} //Formats the date as yyyy-MM-dd
             onChange={handleInputChange}
             className="form-input"
             required

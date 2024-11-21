@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JobBoard.ControllerTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+235ac9d9c9aae0bd9cee794aa00226fbe2de372e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec1d78c0368c06cf3a29faa503dfe3ab63f56786")]
 [assembly: System.Reflection.AssemblyProductAttribute("JobBoard.ControllerTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JobBoard.ControllerTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

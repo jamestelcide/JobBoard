@@ -10,7 +10,7 @@ const JobList: React.FC = () => {
   const [jobs, setJobs] = useState<JobItemProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { getToken } = useAuth(); // Access the token
+  const { getToken } = useAuth();
 
   const fetchJobs = async (location?: string) => {
     const token = getToken();
@@ -25,7 +25,7 @@ const JobList: React.FC = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: {location }, // Add query params for filtering
+        params: {location },
       });
 
       setJobs(response.data);
@@ -40,7 +40,6 @@ const JobList: React.FC = () => {
   };
 
   useEffect(() => {
-    // Fetch all jobs initially
     fetchJobs();
   }, [getToken]);
 

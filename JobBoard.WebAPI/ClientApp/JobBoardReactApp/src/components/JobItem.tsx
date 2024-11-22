@@ -24,15 +24,15 @@ const JobItem: React.FC<JobItemProps> = ({
       <p className="job-type">{jobType}</p>
       <p className="job-type">{new Date(jobPostedDate).toLocaleDateString()}</p>
       <p className="job-type">{fullDescription}</p>
-      <a href="#" className="apply-button">
+      <a href="#" className="job-item-button">
         Apply On Company Website
       </a>
       <br></br>
       <div>
-        <Link to={`/edit/${jobID}`} className="edit-button apply-button">
+        <Link to={`/edit/${jobID}`} className="job-item-button">
           Edit Listing
         </Link>
-        <Link to={`/delete/${jobID}`} className="edit-button apply-button">
+        <Link to={`/delete/${jobID}`} className="job-item-button">
           Delete Listing
         </Link>
       </div>

@@ -1,6 +1,7 @@
 .container {
   display: flex;
   justify-content: center;
+  font-family: "Roboto", Arial, sans-serif;
 }
 
 .search-bar {
@@ -40,9 +41,9 @@
 }
 
 .search-button {
-  background-color: #1a73e8;
+  background-color: #333;
   color: white;
-  border: none;
+  border: 2px white solid;
   border-radius: 4px;
   padding: 8px 16px;
   font-size: 14px;
@@ -50,7 +51,9 @@
 }
 
 .search-button:hover {
-  background-color: #135ab8;
+  background-color: white;
+  border: 2px black solid;
+  color: black;
 }
 
 .post-listing {
@@ -60,8 +63,9 @@
 }
 
 .post-listing a {
-  color: #1a73e8;
+  color: #555;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .post-listing a:hover {

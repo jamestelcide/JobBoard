@@ -47,23 +47,31 @@ const EditJobListingForm: React.FC = () => {
   }, [jobID, getToken]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setJob((prevJob) => ({
       ...prevJob,
-      [name]: name === "jobPostedDate" ? new Date(value) : value,
+      [name]:
+        name === "jobPostedDate"
+          ? new Date(value)
+          : name === "jobType"
+          ? Number(value) || 0
+          : value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const updatedJob = {
       ...job,
-      jobType: job.jobType === JobTypeOptions.FullTime ? job.jobType : parseInt(job.jobType.toString(), 10),
+      jobType: parseInt(job.jobType.toString(), 10),
       jobPostedDate: job.jobPostedDate.toISOString(),
     };
+    console.log("Job updated:", updatedJob.jobType);
 
     const token = getToken();
     try {
@@ -156,6 +164,7 @@ const EditJobListingForm: React.FC = () => {
             className="form-input"
             required
           >
+            <option value="">Select Job Type</option>
             <option value={JobTypeOptions.FullTime}>FullTime</option>
             <option value={JobTypeOptions.PartTime}>PartTime</option>
             <option value={JobTypeOptions.Internship}>Internship</option>

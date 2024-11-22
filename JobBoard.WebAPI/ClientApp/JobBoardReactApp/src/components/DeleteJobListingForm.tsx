@@ -45,7 +45,7 @@ const DeleteJobListingForm: React.FC = () => {
     };
     fetchJobDetails();
   }, [jobID, getToken]);
-  
+
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this job listing?"

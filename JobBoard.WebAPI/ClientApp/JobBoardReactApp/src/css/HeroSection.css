@@ -1,0 +1,96 @@
+.hero-container {
+  text-align: center;
+  padding: 50px;
+  background-color: #fff;
+  position: relative;
+  font-family: "Roboto", Arial, sans-serif;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-shapes {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  
+}
+
+.shape {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  margin-left: 80px;
+  margin-right: 80px;
+}
+
+.shape.circle {
+  background-color: #007aff;
+  border-radius: 50%;
+}
+
+.shape.cube {
+  background-color: #ffc107;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.shape.semicircle {
+  background-color: #ff073a;
+  width: 50px;
+  height: 25px;
+  border-radius: 25px 25px 0 0;
+}
+
+.shape.cylinder {
+  background-color: #28a745;
+  border-radius: 20px;
+}
+.briefcase {
+  width: 150px;
+  height: 100px;
+  background-color: #333;
+  border-radius: 5px;
+  position: relative;
+  margin: 50px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.handle {
+  width: 60px;
+  height: 20px;
+  background-color: #555;
+  border-radius: 10px;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.lock {
+  width: 10px;
+  height: 20px;
+  background-color: gold;
+  position: absolute;
+  top: 40px;
+}
+
+.lock.left {
+  left: 20px;
+}
+
+.lock.right {
+  right: 20px;
+}

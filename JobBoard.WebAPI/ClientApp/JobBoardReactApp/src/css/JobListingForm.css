@@ -6,6 +6,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
+  font-family: "Roboto", Arial, sans-serif;
 }
 
 .form-title {
@@ -40,8 +41,7 @@
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 5px rgba(19, 19, 19, 0.5);
 }
 
 .form-textarea {
@@ -53,13 +53,15 @@
   padding: 10px 20px;
   font-size: 1rem;
   color: #fff;
-  background-color: #007bff;
-  border: none;
+  background-color: #333;
+  border: 2px solid white;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
 }

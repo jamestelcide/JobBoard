@@ -8,6 +8,7 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
   text-align: center;
+  font-family: "Roboto", Arial, sans-serif;
 }
 
 .signup-title {
@@ -36,9 +37,9 @@
 .signup-button {
   width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
+  background-color: #333;
   color: white;
-  border: none;
+  border: 2px solid white;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
@@ -46,7 +47,9 @@
 }
 
 .signup-button:hover {
-  background-color: #45a049;
+  background-color: white;
+  border: 2px solid #333;
+  color: black;
 }
 
 .signup-login-link {
@@ -56,7 +59,6 @@
 }
 
 .signup-login-link a {
-  color: #4CAF50;
   text-decoration: none;
 }
 

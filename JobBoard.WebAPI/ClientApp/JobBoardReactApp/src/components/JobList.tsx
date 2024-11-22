@@ -18,14 +18,16 @@ const JobList: React.FC = () => {
 
     try {
       const endpoint = location
-        ? `https://localhost:7181/api/joblisting/citystate/${encodeURIComponent(location)}`
+        ? `https://localhost:7181/api/joblisting/citystate/${encodeURIComponent(
+            location
+          )}`
         : `https://localhost:7181/api/joblisting`;
 
       const response = await axios.get<JobItemProps[]>(endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: {location },
+        params: { location },
       });
 
       setJobs(response.data);
@@ -47,8 +49,8 @@ const JobList: React.FC = () => {
     fetchJobs(location);
   };
 
-  if (loading) return <h3>Loading...</h3>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <h3 className="notice">Loading...</h3>;
+  if (error) return <h2 className="notice">{error}</h2>;
 
   return (
     <div>

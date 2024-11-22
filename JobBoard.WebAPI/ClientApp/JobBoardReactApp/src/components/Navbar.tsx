@@ -37,17 +37,15 @@ const Navbar: React.FC = () => {
       <div className="nav-right">
         {isLoggedIn ? (
           <>
-            <span>{userEmail}</span> 
-            <span className="separator">|</span>
-            <Link to="#" onClick={logout}>
+            <span className="user-email">{userEmail}</span> 
+            <Link to="#" onClick={logout} className="nav-btn">
               Logout
             </Link>{" "}
           </>
         ) : (
           <>
-            <Link to="/signup">Signup</Link>
-            <span className="separator">|</span>
-            <Link to="/login">Login</Link>
+            <Link to="/signup" className="nav-btn">Signup</Link>
+            <Link to="/login" className="nav-btn">Login</Link>
           </>
         )}
       </div>

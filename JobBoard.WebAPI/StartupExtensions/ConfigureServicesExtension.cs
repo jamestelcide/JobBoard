@@ -12,12 +12,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace JobBoard.WebAPI.StartupExtensions
 {
     /// <summary>
     /// Extension methods for configuring services in the IServiceCollection
-    /// This class contains methods to register various services, middleware, and configurations 
+    /// containing methods to register various services, middleware, and configurations 
     /// needed for the application, including database context, repositories, identity services, 
     /// Swagger, CORS, and authentication settings
     /// </summary>
@@ -53,9 +54,38 @@ namespace JobBoard.WebAPI.StartupExtensions
             .AddXmlSerializerFormatters();
 
             services.AddEndpointsApiExplorer();
+
+            // Configure Swagger
             services.AddSwaggerGen(options =>
             {
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
+
+                // Add security definition for JWT Bearer Authentication
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' followed by a space and your token in the text input below. Example: 'Bearer abc123'"
+                });
+
+                // Add security requirement to enforce JWT token usage
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             }); // generates OpenAPI specification
 
             services.AddCors(options =>
@@ -94,11 +124,10 @@ namespace JobBoard.WebAPI.StartupExtensions
                 .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
                 .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
-            //JWT
+            // JWT Authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
@@ -115,8 +144,7 @@ namespace JobBoard.WebAPI.StartupExtensions
                 };
             });
 
-            services.AddAuthorization(options => {
-            });
+            services.AddAuthorization(options => { });
 
             services.AddControllers();
 

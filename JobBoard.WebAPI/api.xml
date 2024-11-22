@@ -124,7 +124,7 @@
         <member name="T:JobBoard.WebAPI.StartupExtensions.ConfigureServicesExtension">
             <summary>
             Extension methods for configuring services in the IServiceCollection
-            This class contains methods to register various services, middleware, and configurations 
+            containing methods to register various services, middleware, and configurations 
             needed for the application, including database context, repositories, identity services, 
             Swagger, CORS, and authentication settings
             </summary>

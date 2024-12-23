@@ -28,11 +28,6 @@ Prerequisites
 * SQL Server set up with a new database called 'JobListingDatabase'
 * Node.js and npm installed
 
-Setup
-1. Clone the Repository
-2. Navigate to the backend folder and configure the database connection in appsettings.json
-3. Navigate to the frontend folder and install dependencies
-
 # API Documentation
 The API endpoints can be tested using Swagger. Once the backend is running, navigate to:
 http://localhost:7181/
